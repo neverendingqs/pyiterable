@@ -246,8 +246,33 @@ class TestIterable(TestCase):
                     Iterable(test_input).reversed()
                 )
 
-    def test_sorted(self):
-        self.fail()
+    def test_sorted_noOptionalArguments_returnsSortedIterable(self):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertCountEqual(
+                    sorted(test_input),
+                    Iterable(test_input).sorted()
+                )
+
+    def test_sorted_reverse_returnsReversedSortedIterable(self):
+        reversed_sort = True
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertCountEqual(
+                    sorted(test_input, reverse=reversed_sort),
+                    Iterable(test_input).sorted(reverse=reversed_sort)
+                )
+
+    def test_sorted_withKey_returnsSortedIterable(self):
+        key = lambda x: x.stub
+
+        for test_input in [self.__clazz_list, set(self.__clazz_list)]:
+            with self.subTest(test_input=test_input):
+                self.assertCountEqual(
+                    sorted(test_input, key=key),
+                    Iterable(test_input).sorted(key=key)
+                )
 
     def test_sum(self):
         self.fail()
