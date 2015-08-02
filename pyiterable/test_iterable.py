@@ -59,11 +59,65 @@ class TestIterable(TestCase):
                     type(actual)
                 )
 
-    def test_all(self):
-        self.fail()
+    def test_all_hasFalse_returnsFalse(self):
+        test_list = [True, False, True, True]
 
-    def test_any(self):
-        self.fail()
+        test_input = [
+            test_list,
+            set(test_list)
+        ]
+
+        for i in test_input:
+            with self.subTest(i=i):
+                self.assertEqual(
+                    all(i),
+                    Iterable(i).all()
+                )
+
+    def test_all_onlyHasTrue_returnsTrue(self):
+        test_list = [True for i in range(7)]
+
+        test_input = [
+            test_list,
+            set(test_list)
+        ]
+
+        for i in test_input:
+            with self.subTest(i=i):
+                self.assertEqual(
+                    all(i),
+                    Iterable(i).all()
+                )
+
+    def test_any_hasTrue_returnsTrue(self):
+        test_list = [True, False, True, True]
+
+        test_input = [
+            test_list,
+            set(test_list)
+        ]
+
+        for i in test_input:
+            with self.subTest(i=i):
+                self.assertEqual(
+                    any(i),
+                    Iterable(i).any()
+                )
+
+    def test_any_onlyHasFalse_returnsFalse(self):
+        test_list = [False for i in range(7)]
+
+        test_input = [
+            test_list,
+            set(test_list)
+        ]
+
+        for i in test_input:
+            with self.subTest(i=i):
+                self.assertEqual(
+                    any(i),
+                    Iterable(i).any()
+                )
 
     def test_enumerate(self):
         self.fail()

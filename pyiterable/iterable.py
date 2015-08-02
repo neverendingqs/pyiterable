@@ -22,10 +22,10 @@ class Iterable:
 
     # built-in equivalent transformations
     def all(self):
-        return Iterable(all(self.__iterable))
+        return all(self.__iterable)
 
     def any(self):
-        return Iterable(any(self.__iterable))
+        return any(self.__iterable)
 
     def enumerate(self, start=0):
         return Iterable(enumerate(self.__iterable, start))
