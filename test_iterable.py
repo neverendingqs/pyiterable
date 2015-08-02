@@ -274,8 +274,37 @@ class TestIterable(TestCase):
                     Iterable(test_input).sorted(key=key)
                 )
 
-    def test_sum(self):
-        self.fail()
+    def test_sum_noStartValue_returnsSum(self):
+        test_inputs = [
+            self.__int_list,
+            self.__float_list,
+            set(self.__int_list),
+            set(self.__float_list)
+        ]
+
+        for test_input in test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    sum(test_input),
+                    Iterable(test_input).sum()
+                )
+
+    def test_sum_withStartValue_returnsSumWithStartValue(self):
+        test_inputs = [
+            self.__int_list,
+            self.__float_list,
+            set(self.__int_list),
+            set(self.__float_list)
+        ]
+
+        start = 10
+
+        for test_input in test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    sum(test_input, start),
+                    Iterable(test_input).sum(start)
+                )
 
     def test_zip(self):
         self.fail()
