@@ -239,7 +239,12 @@ class TestIterable(TestCase):
                 )
 
     def test_reversed(self):
-        self.fail()
+        for test_input in self.__test_lists:
+            with self.subTest(test_input=test_input):
+                self.assertCountEqual(
+                    reversed(test_input),
+                    Iterable(test_input).reversed()
+                )
 
     def test_sorted(self):
         self.fail()
