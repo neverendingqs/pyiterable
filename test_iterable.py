@@ -32,6 +32,7 @@ class TestIterable(TestCase):
         self.__bool_list = [True, False, False, True, False, False]
         self.__int_list = [1, 2, 2, 5, 0, -8]
         self.__float_list = [1.3, 74.5, 9837.293, -283.4, 74.5]
+        self.__string = "qwerty"
         self.__string_list = ["akd", "fadskl", "dfa", "akd"]
         self.__clazz_list = [TestIterableTestClazz(i) for i in range(7)]
         self.__clazz_list.append(self.__clazz_list[0])  # Creates duplicates in list
