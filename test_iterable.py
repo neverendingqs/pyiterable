@@ -201,12 +201,42 @@ class TestIterable(TestCase):
         for test_input in [[], set()]:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
-                    max(test_input, default=7),
+                    max(test_input, default=default),
                     Iterable(test_input).max(default=default)
                 )
 
-    def test_min(self):
-        self.fail()
+    def test_min_noDefault_returnsMin(self):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    min(test_input),
+                    Iterable(test_input).min()
+                )
+
+    def test_min_noDefaultWithKeyArgument_returnsMin(self):
+        key = lambda x: x.stub
+
+        test_inputs = [
+            self.__clazz_list,
+            set(self.__clazz_list)
+        ]
+
+        for test_input in test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    min(test_input, key=key),
+                    Iterable(test_input).min(key=key)
+                )
+
+    def test_min_emptyIterableWithDefault_returnsDefault(self):
+        default = -6
+
+        for test_input in [[], set()]:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    min(test_input, default=default),
+                    Iterable(test_input).min(default=default)
+                )
 
     def test_reversed(self):
         self.fail()
