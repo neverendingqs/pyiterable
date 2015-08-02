@@ -1,5 +1,6 @@
 from unittest import TestCase
-from pyiterable.iterable import Iterable
+
+from iterable import Iterable
 
 
 class TestIterableTestClazz:
@@ -149,7 +150,12 @@ class TestIterable(TestCase):
                 )
 
     def test_len(self):
-        self.fail()
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    len(test_input),
+                    Iterable(test_input).len()
+                )
 
     def test_map(self):
         self.fail()
