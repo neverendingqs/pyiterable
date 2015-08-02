@@ -1,1 +1,1 @@
-__author__ = 'neverendingqs'
+from pyiterable.iterable import Iterable

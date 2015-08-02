@@ -1,7 +1,7 @@
 from functools import reduce
 from unittest import TestCase
 
-from iterable import Iterable
+from pyiterable import Iterable
 
 
 class TestIterableTestClazz:
