@@ -30,14 +30,14 @@ class Iterable:
     def enumerate(self, start=0):
         return Iterable(enumerate(self.__iterable, start))
 
-    def filter(self, func):
-        return Iterable(filter(func, self.__iterable))
+    def filter(self, function):
+        return Iterable(filter(function, self.__iterable))
 
     def len(self):
         return len(self.__iterable)
 
-    def map(self, func):
-        return Iterable(map(func, self.__iterable))
+    def map(self, function):
+        return Iterable(map(function, self.__iterable))
 
     def max(self, **args):
         return max(self.__iterable, **args)
@@ -58,5 +58,5 @@ class Iterable:
         return Iterable(zip(self.__iterable, *args))
 
     # functools equivalent transformations
-    def reduce(self, func, **args):
-        return reduce(func, self.__iterable, **args)
+    def reduce(self, function, **args):
+        return reduce(function, self.__iterable, **args)
