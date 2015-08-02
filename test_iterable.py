@@ -1,9 +1,22 @@
+from functools import reduce
 from unittest import TestCase
 
 from iterable import Iterable
 
 
 class TestIterableTestClazz:
+        def __add__(self, other):
+            # Overridden for reduce
+            return TestIterableTestClazz(self.stub + other.stub)
+
+        def __eq__(self, other):
+            # Overridden for reduce
+            return self.stub == other.stub
+
+        def __hash__(self):
+            # Overridden for reduce
+            return hash(self.stub)
+
         def __lt__(self, other):
             # Overridden for sorting related functions
             # http://stackoverflow.com/a/7152796/2687324
@@ -345,4 +358,11 @@ class TestIterable(TestCase):
                 )
 
     def test_reduce(self):
-        self.fail()
+        func = lambda a, b: a + b
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    reduce(func, test_input),
+                    Iterable(test_input).reduce(func)
+                )
