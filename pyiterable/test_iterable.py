@@ -10,12 +10,15 @@ class TestIterableTestClazz:
 class TestIterable(TestCase):
 
     def setUp(self):
-        self.__int_list = [1, 2, 5, 0, -8]
-        self.__float_list = [1.3, 74.5, 9837.293, -283.4]
-        self.__string_list = ["akd", "fadskl", "dfa"]
+        self.__bool_list = [True, False, False, True, False, False]
+        self.__int_list = [1, 2, 2, 5, 0, -8]
+        self.__float_list = [1.3, 74.5, 9837.293, -283.4, 74.5]
+        self.__string_list = ["akd", "fadskl", "dfa", "akd"]
         self.__clazz_list = [TestIterableTestClazz(i) for i in range(7)]
+        self.__clazz_list.append(self.__clazz_list[0])  # Creates duplicates in list
 
         self.__test_lists = [
+            self.__bool_list,
             self.__int_list,
             self.__float_list,
             self.__string_list,
@@ -32,7 +35,7 @@ class TestIterable(TestCase):
                 actual = Iterable(i).to_list()
 
                 self.assertCountEqual(
-                    i,
+                    list(i),
                     actual
                 )
 
@@ -47,7 +50,7 @@ class TestIterable(TestCase):
                 actual = Iterable(i).to_set()
 
                 self.assertCountEqual(
-                    i,
+                    set(i),
                     actual
                 )
 
