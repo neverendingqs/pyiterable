@@ -49,6 +49,18 @@ class TestIterable(TestCase):
 
         self.__test_input = self.__test_lists + self.__test_sets
 
+    def test_constructor_nonIterable_throwsError(self):
+        test_inputs = [
+            1,
+            -3.4,
+            TestIterableTestClazz("y")
+        ]
+
+        for test_input in test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(TypeError):
+                    Iterable(test_input)
+
     def test_to_list(self):
         for test_input in self.__test_input:
             with self.subTest(test_input=test_input):
