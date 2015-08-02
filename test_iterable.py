@@ -158,7 +158,14 @@ class TestIterable(TestCase):
                 )
 
     def test_map(self):
-        self.fail()
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                func = lambda x: str(x)[0]
+
+                self.assertEqual(
+                    list(map(func, test_input)),
+                    list(Iterable(test_input).map(func))
+                )
 
     def test_max(self):
         self.fail()
