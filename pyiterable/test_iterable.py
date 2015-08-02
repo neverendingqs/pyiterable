@@ -119,8 +119,22 @@ class TestIterable(TestCase):
                     Iterable(i).any()
                 )
 
-    def test_enumerate(self):
-        self.fail()
+    def test_enumerate_defaultStart(self):
+        for i in self.__test_input:
+            with self.subTest(i=i):
+                self.assertCountEqual(
+                    list(enumerate(i)),
+                    list(Iterable(i).enumerate())
+                )
+
+    def test_enumerate_customStart(self):
+        start = 3
+        for i in self.__test_input:
+            with self.subTest(i=i):
+                self.assertCountEqual(
+                    list(enumerate(i, start)),
+                    list(Iterable(i).enumerate(start))
+                )
 
     def test_filter(self):
         self.fail()
