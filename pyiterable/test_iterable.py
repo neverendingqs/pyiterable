@@ -30,12 +30,12 @@ class TestIterable(TestCase):
         self.__test_input = self.__test_lists + self.__test_sets
 
     def test_to_list(self):
-        for i in self.__test_input:
-            with self.subTest(i=i):
-                actual = Iterable(i).to_list()
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                actual = Iterable(test_input).to_list()
 
                 self.assertCountEqual(
-                    list(i),
+                    list(test_input),
                     actual
                 )
 
@@ -45,12 +45,12 @@ class TestIterable(TestCase):
                 )
 
     def test_to_set(self):
-        for i in self.__test_input:
-            with self.subTest(i=i):
-                actual = Iterable(i).to_set()
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                actual = Iterable(test_input).to_set()
 
                 self.assertCountEqual(
-                    set(i),
+                    set(test_input),
                     actual
                 )
 
@@ -67,11 +67,11 @@ class TestIterable(TestCase):
             set(test_list)
         ]
 
-        for i in test_input:
-            with self.subTest(i=i):
+        for test_input in test_input:
+            with self.subTest(test_input=test_input):
                 self.assertEqual(
-                    all(i),
-                    Iterable(i).all()
+                    all(test_input),
+                    Iterable(test_input).all()
                 )
 
     def test_all_onlyHasTrue_returnsTrue(self):
@@ -82,11 +82,11 @@ class TestIterable(TestCase):
             set(test_list)
         ]
 
-        for i in test_input:
-            with self.subTest(i=i):
+        for test_input in test_input:
+            with self.subTest(test_input=test_input):
                 self.assertEqual(
-                    all(i),
-                    Iterable(i).all()
+                    all(test_input),
+                    Iterable(test_input).all()
                 )
 
     def test_any_hasTrue_returnsTrue(self):
@@ -97,11 +97,11 @@ class TestIterable(TestCase):
             set(test_list)
         ]
 
-        for i in test_input:
-            with self.subTest(i=i):
+        for test_input in test_input:
+            with self.subTest(test_input=test_input):
                 self.assertEqual(
-                    any(i),
-                    Iterable(i).any()
+                    any(test_input),
+                    Iterable(test_input).any()
                 )
 
     def test_any_onlyHasFalse_returnsFalse(self):
@@ -112,28 +112,28 @@ class TestIterable(TestCase):
             set(test_list)
         ]
 
-        for i in test_input:
-            with self.subTest(i=i):
+        for test_input in test_input:
+            with self.subTest(test_input=test_input):
                 self.assertEqual(
-                    any(i),
-                    Iterable(i).any()
+                    any(test_input),
+                    Iterable(test_input).any()
                 )
 
     def test_enumerate_defaultStart(self):
-        for i in self.__test_input:
-            with self.subTest(i=i):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
                 self.assertCountEqual(
-                    list(enumerate(i)),
-                    list(Iterable(i).enumerate())
+                    list(enumerate(test_input)),
+                    list(Iterable(test_input).enumerate())
                 )
 
     def test_enumerate_customStart(self):
         start = 3
-        for i in self.__test_input:
-            with self.subTest(i=i):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
                 self.assertCountEqual(
-                    list(enumerate(i, start)),
-                    list(Iterable(i).enumerate(start))
+                    list(enumerate(test_input, start)),
+                    list(Iterable(test_input).enumerate(start))
                 )
 
     def test_filter(self):
