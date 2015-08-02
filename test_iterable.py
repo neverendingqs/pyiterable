@@ -306,8 +306,43 @@ class TestIterable(TestCase):
                     Iterable(test_input).sum(start)
                 )
 
-    def test_zip(self):
-        self.fail()
+    def test_zip_twoIterables_returnsProperZip(self):
+        for left in self.__test_input:
+            for right in self.__test_input:
+                with self.subTest(left=left, right=right):
+                    self.assertCountEqual(
+                        list(zip(left, right)),
+                        list(Iterable(left).zip(right))
+                    )
+
+    def test_zip_multipleIterables_returnsProperZip(self):
+        right = self.__test_input
+
+        for left in self.__test_input:
+            with self.subTest(left=left, right=right):
+                self.assertCountEqual(
+                    list(zip(left, right)),
+                    list(Iterable(left).zip(right))
+                )
+
+    def test_zip_iterableWithIterableObject_returns_ProperZip(self):
+        for left in self.__test_input:
+            for right in self.__test_input:
+                with self.subTest(left=left, right=right):
+                    self.assertCountEqual(
+                        list(zip(left, right)),
+                        list(Iterable(left).zip(Iterable(right)))
+                    )
+
+    def test_zip_iterableWithMultipleIterableObjects_returns_ProperZip(self):
+        right = Iterable(self.__test_input)
+
+        for left in self.__test_input:
+            with self.subTest(left=left, right=right):
+                self.assertCountEqual(
+                    list(zip(left, right)),
+                    list(Iterable(left).zip(right))
+                )
 
     def test_reduce(self):
         self.fail()

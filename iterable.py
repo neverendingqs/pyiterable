@@ -61,7 +61,7 @@ class Iterable:
         return sum(self.__iterable, start)
 
     def zip(self, *args):
-        return Iterable(zip(self.__iterable, args))
+        return Iterable(zip(self.__iterable, *args))
 
     # functools equivalent transformations
     def reduce(self, func, initializer=None):
