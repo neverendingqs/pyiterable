@@ -4,8 +4,13 @@ from iterable import Iterable
 
 
 class TestIterableTestClazz:
+        def __lt__(self, other):
+            # Overridden for sorting related functions
+            # http://stackoverflow.com/a/7152796/2687324
+            return self.stub < other.stub
+
         def __init__(self, stub):
-            self.__stub = stub
+            self.stub = stub
 
 
 class TestIterable(TestCase):
@@ -162,13 +167,43 @@ class TestIterable(TestCase):
             with self.subTest(test_input=test_input):
                 func = lambda x: str(x)[0]
 
-                self.assertEqual(
+                self.assertCountEqual(
                     list(map(func, test_input)),
                     list(Iterable(test_input).map(func))
                 )
 
-    def test_max(self):
-        self.fail()
+    def test_max_noDefault_returnsMax(self):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    max(test_input),
+                    Iterable(test_input).max()
+                )
+
+    def test_max_noDefaultWithKeyArgument_returnsMax(self):
+        key = lambda x: x.stub
+
+        test_inputs = [
+            self.__clazz_list,
+            set(self.__clazz_list)
+        ]
+
+        for test_input in test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    max(test_input, key=key),
+                    Iterable(test_input).max(key=key)
+                )
+
+    def test_max_emptyIterableWithDefault_returnsDefault(self):
+        default = 7
+
+        for test_input in [[], set()]:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    max(test_input, default=7),
+                    Iterable(test_input).max(default=default)
+                )
 
     def test_min(self):
         self.fail()

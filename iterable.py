@@ -41,15 +41,15 @@ class Iterable:
 
     def max(self, key=lambda x: x, default=None):
         if default is None:
-            return Iterable(max(self.__iterable, key=key))
+            return max(self.__iterable, key=key)
         else:
-            return Iterable(max(self.__iterable, key=key, default=default))
+            return max(self.__iterable, key=key, default=default)
 
     def min(self, key=lambda x: x, default=None):
         if default is None:
-            return Iterable(min(self.__iterable, key=key))
+            return min(self.__iterable, key=key)
         else:
-            return Iterable(min(self.__iterable, key=key, default=default))
+            return min(self.__iterable, key=key, default=default)
 
     def reversed(self):
         return Iterable(reversed(self.__iterable))
