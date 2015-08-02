@@ -137,7 +137,16 @@ class TestIterable(TestCase):
                 )
 
     def test_filter(self):
-        self.fail()
+        for test_input in self.__test_input:
+            # Extract a random item to filter on
+            filtered_item = set(test_input).pop()
+            func = lambda x: x is filtered_item
+
+            with self.subTest(test_input=test_input):
+                self.assertCountEqual(
+                    filter(func, test_input),
+                    Iterable(test_input).filter(func)
+                )
 
     def test_len(self):
         self.fail()
