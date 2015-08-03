@@ -31,20 +31,20 @@ Instead of:
 
 .. code-block:: python
 
-    no_quotes = map(lambda x: x.strip('"'), values)
-    to_int = map(lambda x: int(x), no_quotes)
+    values = ["1", "2", "5", "9"]
+    
+    to_int = map(lambda x: int(x), values)
     sum = reduce(lambda a, b: a + b, to_int)
 
 or:
 
 .. code-block:: python
 
+    values = ["1", "2", "5", "9"]
+    
     sum = reduce(
         lambda a, b: a + b,
-        map(
-            lambda x: int(x),
-            map(lambda x: x.strip('"'), values)
-        )
+        map(lambda x: int(x), values)
     )
 
 do this:
@@ -53,8 +53,9 @@ do this:
 
     from pyiterable import Iterable
     ...
+    values = ["1", "2", "5", "9"]
+    
     sum = (Iterable(values)
-        .map(lambda x: x.strip('"'))
         .map(lambda x: int(x))
         .reduce(lambda a, b: a + b)
     )
