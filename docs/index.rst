@@ -5,7 +5,9 @@
 
 Pyiterable API Documentation
 ============================
-The purpose of this module is to allow chaining multiple built-in methods that operate on an iterable, which allows coders to be more expressive with the transformations occurring without the intermediate steps.
+Python comes with some nice built-in methods for operating on iterables, but it can get messy really quickly if you want to transform an iterable in multiple ways. Write more expressive code by chaining built-in transformations with this module.
+
+Scroll down for examples.
 
 
 Classes
@@ -34,6 +36,7 @@ Instead of:
     values = ["1", "2", "5", "9"]
     
     to_int = map(lambda x: int(x), values)
+    filtered = filter(lambda x: x > 4)
     sum = reduce(lambda a, b: a + b, to_int)
 
 or:
@@ -44,7 +47,10 @@ or:
     
     sum = reduce(
         lambda a, b: a + b,
-        map(lambda x: int(x), values)
+        filter(
+            lambda x: x > 4,
+            map(lambda x: int(x), values)
+        )
     )
 
 do this:
@@ -57,6 +63,7 @@ do this:
     
     sum = (Iterable(values)
         .map(lambda x: int(x))
+        .filter(lambda x: x > 4)
         .reduce(lambda a, b: a + b)
     )
 
