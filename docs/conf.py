@@ -1,7 +1,8 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # pyiterable documentation build configuration file, created by
-# sphinx-quickstart on Sun Aug 02 18:38:45 2015.
+# sphinx-quickstart on Tue Aug  4 20:43:50 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -46,9 +47,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'pyiterable'
-copyright = u'2015, neverendingqs'
-author = u'neverendingqs'
+project = 'pyiterable'
+copyright = '2015, neverendingqs'
+author = 'neverendingqs'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -187,8 +188,8 @@ html_static_path = ['_static']
 
 # Language to be used for generating the HTML full-text search index.
 # Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
+#   'da', 'de', 'en', 'es', 'fi', 'fr', 'h', 'it', 'ja'
+#   'nl', 'no', 'pt', 'ro', 'r', 'sv', 'tr'
 #html_search_language = 'en'
 
 # A dictionary with options for the search language support, empty by default.
@@ -222,8 +223,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'pyiterable.tex', u'pyiterable Documentation',
-   u'neverendingqs', 'manual'),
+  (master_doc, 'pyiterable.tex', 'pyiterable Documentation',
+   'neverendingqs', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -252,7 +253,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyiterable', u'pyiterable Documentation',
+    (master_doc, 'pyiterable', 'pyiterable Documentation',
      [author], 1)
 ]
 
@@ -266,7 +267,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'pyiterable', u'pyiterable Documentation',
+  (master_doc, 'pyiterable', 'pyiterable Documentation',
    author, 'pyiterable', 'One line description of project.',
    'Miscellaneous'),
 ]

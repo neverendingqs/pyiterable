@@ -1,11 +1,6 @@
-.. pyiterable documentation master file, created by
-   sphinx-quickstart on Sun Aug 02 18:38:45 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Pyiterable API Documentation
 ============================
-Python comes with some nice built-in methods for operating on iterables, but it can get messy really quickly if you want to transform an iterable in multiple ways. Write more expressive code by chaining built-in transformations with this module.
+Python comes with some nice built-in methods for operating on iterables, but it can get messy really quickly if you want to transform an iterable multiple times. Write more expressive code by chaining built-in transformations with this module.
 
 Scroll down for examples.
 
