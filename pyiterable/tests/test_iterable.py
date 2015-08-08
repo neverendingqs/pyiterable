@@ -5,25 +5,25 @@ from pyiterable import Iterable
 
 
 class TestIterableTestClazz:
-        def __add__(self, other):
-            # Overridden for reduce
-            return TestIterableTestClazz(self.stub + other.stub)
+    def __add__(self, other):
+        # Overridden for reduce
+        return TestIterableTestClazz(self.stub + other.stub)
 
-        def __eq__(self, other):
-            # Overridden for reduce
-            return self.stub == other.stub
+    def __eq__(self, other):
+        # Overridden for reduce
+        return self.stub == other.stub
 
-        def __hash__(self):
-            # Overridden for reduce
-            return hash(self.stub)
+    def __hash__(self):
+        # Overridden for reduce
+        return hash(self.stub)
 
-        def __lt__(self, other):
-            # Overridden for sorting related functions
-            # http://stackoverflow.com/a/7152796/2687324
-            return self.stub < other.stub
+    def __lt__(self, other):
+        # Overridden for sorting related functions
+        # http://stackoverflow.com/a/7152796/2687324
+        return self.stub < other.stub
 
-        def __init__(self, stub):
-            self.stub = stub
+    def __init__(self, stub):
+        self.stub = stub
 
 
 class TestIterable(TestCase):
