@@ -1,3 +1,4 @@
+from collections import Counter
 from functools import reduce
 from unittest import TestCase
 
@@ -57,39 +58,36 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_inputs:
-            with self.subTest(test_input=test_input):
-                with self.assertRaises(TypeError):
-                    Iterable(test_input)
+            with self.assertRaises(TypeError):
+                Iterable(test_input)
 
     def test_to_list(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                actual = Iterable(test_input).to_list()
+            actual = Iterable(test_input).to_list()
 
-                self.assertCountEqual(
-                    list(test_input),
-                    actual
-                )
+            self.assertEqual(
+                Counter(list(test_input)),
+                Counter(actual)
+            )
 
-                self.assertIs(
-                    type([]),
-                    type(actual)
-                )
+            self.assertIs(
+                type([]),
+                type(actual)
+            )
 
     def test_to_set(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                actual = Iterable(test_input).to_set()
+            actual = Iterable(test_input).to_set()
 
-                self.assertCountEqual(
-                    set(test_input),
-                    actual
-                )
+            self.assertEqual(
+                Counter(set(test_input)),
+                Counter(actual)
+            )
 
-                self.assertIs(
-                    type(set()),
-                    type(actual)
-                )
+            self.assertIs(
+                type(set()),
+                type(actual)
+            )
 
     def test_all_hasFalse_returnsFalse(self):
         test_list = [True, False, True, True]
@@ -100,11 +98,10 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    all(test_input),
-                    Iterable(test_input).all()
-                )
+            self.assertEqual(
+                all(test_input),
+                Iterable(test_input).all()
+            )
 
     def test_all_onlyHasTrue_returnsTrue(self):
         test_list = [True for i in range(7)]
@@ -115,11 +112,10 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    all(test_input),
-                    Iterable(test_input).all()
-                )
+            self.assertEqual(
+                all(test_input),
+                Iterable(test_input).all()
+            )
 
     def test_any_hasTrue_returnsTrue(self):
         test_list = [True, False, True, True]
@@ -130,11 +126,10 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    any(test_input),
-                    Iterable(test_input).any()
-                )
+            self.assertEqual(
+                any(test_input),
+                Iterable(test_input).any()
+            )
 
     def test_any_onlyHasFalse_returnsFalse(self):
         test_list = [False for i in range(7)]
@@ -145,28 +140,25 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    any(test_input),
-                    Iterable(test_input).any()
-                )
+            self.assertEqual(
+                any(test_input),
+                Iterable(test_input).any()
+            )
 
     def test_enumerate_defaultStart(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    list(enumerate(test_input)),
-                    list(Iterable(test_input).enumerate())
-                )
+            self.assertEqual(
+                Counter(list(enumerate(test_input))),
+                Counter(list(Iterable(test_input).enumerate()))
+            )
 
     def test_enumerate_customStart(self):
         start = 3
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    list(enumerate(test_input, start)),
-                    list(Iterable(test_input).enumerate(start))
-                )
+            self.assertEqual(
+                Counter(list(enumerate(test_input, start))),
+                Counter(list(Iterable(test_input).enumerate(start)))
+            )
 
     def test_filter(self):
         for test_input in self.__test_input:
@@ -174,37 +166,33 @@ class TestIterable(TestCase):
             filtered_item = set(test_input).pop()
             func = lambda x: x is filtered_item
 
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    filter(func, test_input),
-                    Iterable(test_input).filter(func)
-                )
+            self.assertEqual(
+                Counter(filter(func, test_input)),
+                Counter(Iterable(test_input).filter(func))
+            )
 
     def test_len(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    len(test_input),
-                    Iterable(test_input).len()
-                )
+            self.assertEqual(
+                len(test_input),
+                Iterable(test_input).len()
+            )
 
     def test_map(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                func = lambda x: str(x)[0]
+            func = lambda x: str(x)[0]
 
-                self.assertCountEqual(
-                    list(map(func, test_input)),
-                    list(Iterable(test_input).map(func))
-                )
+            self.assertEqual(
+                Counter(list(map(func, test_input))),
+                Counter(list(Iterable(test_input).map(func)))
+            )
 
     def test_max_noDefault_returnsMax(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    max(test_input),
-                    Iterable(test_input).max()
-                )
+            self.assertEqual(
+                max(test_input),
+                Iterable(test_input).max()
+            )
 
     def test_max_noDefaultWithKeyArgument_returnsMax(self):
         key = lambda x: x.stub
@@ -215,29 +203,26 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_inputs:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    max(test_input, key=key),
-                    Iterable(test_input).max(key=key)
-                )
+            self.assertEqual(
+                max(test_input, key=key),
+                Iterable(test_input).max(key=key)
+            )
 
     def test_max_emptyIterableWithDefault_returnsDefault(self):
         default = 7
 
         for test_input in [[], set()]:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    max(test_input, default=default),
-                    Iterable(test_input).max(default=default)
-                )
+            self.assertEqual(
+                default,
+                Iterable(test_input).max(default=default)
+            )
 
     def test_min_noDefault_returnsMin(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    min(test_input),
-                    Iterable(test_input).min()
-                )
+            self.assertEqual(
+                min(test_input),
+                Iterable(test_input).min()
+            )
 
     def test_min_noDefaultWithKeyArgument_returnsMin(self):
         key = lambda x: x.stub
@@ -248,57 +233,51 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_inputs:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    min(test_input, key=key),
-                    Iterable(test_input).min(key=key)
-                )
+            self.assertEqual(
+                min(test_input, key=key),
+                Iterable(test_input).min(key=key)
+            )
 
     def test_min_emptyIterableWithDefault_returnsDefault(self):
         default = -6
 
         for test_input in [[], set()]:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    min(test_input, default=default),
-                    Iterable(test_input).min(default=default)
-                )
+            self.assertEqual(
+                default,
+                Iterable(test_input).min(default=default)
+            )
 
     def test_reversed(self):
         for test_input in self.__test_lists:
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    reversed(test_input),
-                    Iterable(test_input).reversed()
-                )
+            self.assertEqual(
+                Counter(reversed(test_input)),
+                Counter(Iterable(test_input).reversed())
+            )
 
     def test_sorted_noOptionalArguments_returnsSortedIterable(self):
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    sorted(test_input),
-                    Iterable(test_input).sorted()
-                )
+            self.assertEqual(
+                Counter(sorted(test_input)),
+                Counter(Iterable(test_input).sorted())
+            )
 
     def test_sorted_reverse_returnsReversedSortedIterable(self):
         reversed_sort = True
 
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    sorted(test_input, reverse=reversed_sort),
-                    Iterable(test_input).sorted(reverse=reversed_sort)
-                )
+            self.assertEqual(
+                Counter(sorted(test_input, reverse=reversed_sort)),
+                Counter(Iterable(test_input).sorted(reverse=reversed_sort))
+            )
 
     def test_sorted_withKey_returnsSortedIterable(self):
         key = lambda x: x.stub
 
         for test_input in [self.__clazz_list, set(self.__clazz_list)]:
-            with self.subTest(test_input=test_input):
-                self.assertCountEqual(
-                    sorted(test_input, key=key),
-                    Iterable(test_input).sorted(key=key)
-                )
+            self.assertEqual(
+                Counter(sorted(test_input, key=key)),
+                Counter(Iterable(test_input).sorted(key=key))
+            )
 
     def test_sum_noStartValue_returnsSum(self):
         test_inputs = [
@@ -309,11 +288,10 @@ class TestIterable(TestCase):
         ]
 
         for test_input in test_inputs:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    sum(test_input),
-                    Iterable(test_input).sum()
-                )
+            self.assertEqual(
+                sum(test_input),
+                Iterable(test_input).sum()
+            )
 
     def test_sum_withStartValue_returnsSumWithStartValue(self):
         test_inputs = [
@@ -326,56 +304,49 @@ class TestIterable(TestCase):
         start = 10
 
         for test_input in test_inputs:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    sum(test_input, start),
-                    Iterable(test_input).sum(start)
-                )
+            self.assertEqual(
+                sum(test_input, start),
+                Iterable(test_input).sum(start)
+            )
 
     def test_zip_twoIterables_returnsProperZip(self):
         for left in self.__test_input:
             for right in self.__test_input:
-                with self.subTest(left=left, right=right):
-                    self.assertCountEqual(
-                        list(zip(left, right)),
-                        list(Iterable(left).zip(right))
-                    )
+                self.assertEqual(
+                    Counter(list(zip(left, right))),
+                    Counter(list(Iterable(left).zip(right)))
+                )
 
     def test_zip_multipleIterables_returnsProperZip(self):
         right = self.__test_input
 
         for left in self.__test_input:
-            with self.subTest(left=left, right=right):
-                self.assertCountEqual(
-                    list(zip(left, right)),
-                    list(Iterable(left).zip(right))
-                )
+            self.assertEqual(
+                Counter(list(zip(left, *right))),
+                Counter(list(Iterable(left).zip(*right)))
+            )
 
-    def test_zip_iterableWithIterableObject_returns_ProperZip(self):
+    def test_zip_iterableWithIterableObject_returnsProperZip(self):
         for left in self.__test_input:
             for right in self.__test_input:
-                with self.subTest(left=left, right=right):
-                    self.assertCountEqual(
-                        list(zip(left, right)),
-                        list(Iterable(left).zip(Iterable(right)))
-                    )
-
-    def test_zip_iterableWithMultipleIterableObjects_returns_ProperZip(self):
-        right = Iterable(self.__test_input)
-
-        for left in self.__test_input:
-            with self.subTest(left=left, right=right):
-                self.assertCountEqual(
-                    list(zip(left, right)),
-                    list(Iterable(left).zip(right))
+                self.assertEqual(
+                    Counter(zip(left, right)),
+                    Counter(Iterable(left).zip(Iterable(right)))
                 )
+
+    def test_zip_iterableWithMultipleIterableObjects_returnsProperZip(self):
+        right = list(map(lambda x: Iterable(x), self.__test_input))
+        for left in self.__test_input:
+            self.assertEqual(
+                Counter(zip(left, *right)),
+                Counter(Iterable(left).zip(*right))
+            )
 
     def test_reduce(self):
         func = lambda a, b: a + b
 
         for test_input in self.__test_input:
-            with self.subTest(test_input=test_input):
-                self.assertEqual(
-                    reduce(func, test_input),
-                    Iterable(test_input).reduce(func)
-                )
+            self.assertEqual(
+                reduce(func, test_input),
+                Iterable(test_input).reduce(func)
+            )

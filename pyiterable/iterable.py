@@ -39,11 +39,17 @@ class Iterable:
     def map(self, function):
         return Iterable(map(function, self.__iterable))
 
-    def max(self, **args):
-        return max(self.__iterable, **args)
+    def max(self, key=lambda x: x, default=None):
+        if len(self.__iterable) == 0 and default is not None:
+            return default
+        else:
+            return max(self.__iterable, key=key)
 
-    def min(self, **args):
-        return min(self.__iterable, **args)
+    def min(self, key=lambda x: x, default=None):
+        if len(self.__iterable) == 0 and default is not None:
+            return default
+        else:
+            return min(self.__iterable, key=key)
 
     def reversed(self):
         return Iterable(reversed(self.__iterable))
