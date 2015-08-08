@@ -164,6 +164,7 @@ class TestIterable(TestCase):
                 Counter(list(Iterable(test_input).enumerate()))
             )
 
+    @skipIf(sys.version_info < (2, 6), "'start' keyword-only argument is new in 2.6")
     def test_enumerate_customStart(self):
         start = 3
         for test_input in self.__test_input:
