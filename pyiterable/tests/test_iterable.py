@@ -18,6 +18,16 @@ class TestIterableTestClazz:
         # Overridden for reduce
         return hash(self.stub)
 
+    def __ge__(self, other):
+        # Overridden for sorting related functions
+        # Test idea from http://stackoverflow.com/a/3755251/2687324
+        return self.stub >= other.stub
+
+    def __le__(self, other):
+        # Overridden for sorting related functions
+        # Test idea from http://stackoverflow.com/a/3755251/2687324
+        return self.stub <= other.stub
+
     def __lt__(self, other):
         # Overridden for sorting related functions
         # http://stackoverflow.com/a/7152796/2687324
@@ -248,35 +258,62 @@ class TestIterable(TestCase):
             )
 
     def test_reversed(self):
+        err_msg = "{} is not the reverse of the input {}"
+
         for test_input in self.__test_lists:
+            reversed_iterable = (Iterable(test_input)
+                                 .reversed()
+                                 .to_list())
+
             self.assertEqual(
-                Counter(reversed(test_input)),
-                Counter(Iterable(test_input).reversed())
+                len(test_input),
+                len(reversed_iterable),
+                msg=err_msg.format(reversed_iterable, test_input)
+            )
+
+            self.assertTrue(
+                all(
+                    test_input[i] == reversed_iterable[len(reversed_iterable) - i - 1]
+                    for i in range(len(reversed_iterable))
+                ),
+                msg=err_msg.format(reversed_iterable, test_input)
             )
 
     def test_sorted_noOptionalArguments_returnsSortedIterable(self):
         for test_input in self.__test_input:
-            self.assertEqual(
-                Counter(sorted(test_input)),
-                Counter(Iterable(test_input).sorted())
+            sorted_iterable = (Iterable(test_input)
+                               .sorted()
+                               .to_list())
+
+            self.assertTrue(
+                all(sorted_iterable[i] <= sorted_iterable[i+1] for i in range(len(sorted_iterable) - 1)),
+                msg="Iterable {} not sorted".format(sorted_iterable)
             )
 
     def test_sorted_reverse_returnsReversedSortedIterable(self):
         reversed_sort = True
 
         for test_input in self.__test_input:
-            self.assertEqual(
-                Counter(sorted(test_input, reverse=reversed_sort)),
-                Counter(Iterable(test_input).sorted(reverse=reversed_sort))
+            sorted_iterable = (Iterable(test_input)
+                               .sorted(reverse=reversed_sort)
+                               .to_list())
+
+            self.assertTrue(
+                all(sorted_iterable[i] >= sorted_iterable[i+1] for i in range(len(sorted_iterable) - 1)),
+                msg="Iterable {} not sorted".format(sorted_iterable)
             )
 
     def test_sorted_withKey_returnsSortedIterable(self):
         key = lambda x: x.stub
 
         for test_input in [self.__clazz_list, set(self.__clazz_list)]:
-            self.assertEqual(
-                Counter(sorted(test_input, key=key)),
-                Counter(Iterable(test_input).sorted(key=key))
+            sorted_iterable = (Iterable(test_input)
+                               .sorted(key=key)
+                               .to_list())
+
+            self.assertTrue(
+                all(sorted_iterable[i].stub <= sorted_iterable[i+1].stub for i in range(len(sorted_iterable) - 1)),
+                msg="Iterable {} not sorted".format(sorted_iterable)
             )
 
     def test_sum_noStartValue_returnsSum(self):

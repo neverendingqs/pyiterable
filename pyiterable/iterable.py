@@ -13,6 +13,9 @@ class Iterable:
     def __next__(self):
         return self.__iterable.__next__()
 
+    def __len__(self):
+        return len(self.__iterable)
+
     # built-in equivalent data structures
     def to_list(self):
         return list(self.__iterable)
@@ -34,7 +37,7 @@ class Iterable:
         return Iterable(filter(function, self.__iterable))
 
     def len(self):
-        return len(self.__iterable)
+        return self.__len__()
 
     def map(self, function):
         return Iterable(map(function, self.__iterable))
