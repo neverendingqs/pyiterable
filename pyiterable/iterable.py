@@ -25,9 +25,23 @@ class Iterable:
 
     # built-in equivalent transformations
     def all(self):
+        """ Equivalent to the built-in function **all(** *iterable* **)**
+
+            >>> Iterable([True, False, True]).all()
+            False
+            >>> Iterable([True, True, True, True]).all()
+            True
+        """
         return all(self.__iterable)
 
     def any(self):
+        """ Equivalent to the built-in function **any(** *iterable* **)**
+
+            >>> Iterable([True, False, True]).any()
+            True
+            >>> Iterable([False, False, False, False]).any()
+            False
+        """
         return any(self.__iterable)
 
     def enumerate(self, start=0):
