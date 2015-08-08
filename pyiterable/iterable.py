@@ -42,23 +42,17 @@ class Iterable:
     def map(self, function):
         return Iterable(map(function, self.__iterable))
 
-    def max(self, key=lambda x: x, default=None):
-        if len(self.__iterable) == 0 and default is not None:
-            return default
-        else:
-            return max(self.__iterable, key=key)
+    def max(self, **kwargs):
+        return max(self.__iterable, **kwargs)
 
-    def min(self, key=lambda x: x, default=None):
-        if len(self.__iterable) == 0 and default is not None:
-            return default
-        else:
-            return min(self.__iterable, key=key)
+    def min(self, **kwargs):
+        return min(self.__iterable, **kwargs)
 
     def reversed(self):
         return Iterable(reversed(self.__iterable))
 
-    def sorted(self, **args):
-        return Iterable(sorted(self.__iterable, **args))
+    def sorted(self, **kwargs):
+        return Iterable(sorted(self.__iterable, **kwargs))
 
     def sum(self, start=0):
         return sum(self.__iterable, start)
@@ -67,5 +61,5 @@ class Iterable:
         return Iterable(zip(self.__iterable, *args))
 
     # functools equivalent transformations
-    def reduce(self, function, **args):
-        return reduce(function, self.__iterable, **args)
+    def reduce(self, function, **kwargs):
+        return reduce(function, self.__iterable, **kwargs)

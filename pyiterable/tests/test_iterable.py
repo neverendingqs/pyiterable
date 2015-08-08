@@ -1,6 +1,8 @@
 from collections import Counter
 from functools import reduce
 from unittest import TestCase
+from unittest import skipIf
+import sys
 
 from pyiterable import Iterable
 
@@ -218,6 +220,7 @@ class TestIterable(TestCase):
                 Iterable(test_input).max(key=key)
             )
 
+    @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
     def test_max_emptyIterableWithDefault_returnsDefault(self):
         default = 7
 
@@ -225,6 +228,27 @@ class TestIterable(TestCase):
             self.assertEqual(
                 default,
                 Iterable(test_input).max(default=default)
+            )
+
+    @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
+    def test_max_emptyIterableAndDefaultIsNone_returnsNone(self):
+        for test_input in [[], set()]:
+            self.assertEqual(
+                None,
+                Iterable(test_input).max(default=None)
+            )
+
+    def test_max_invalidKeywordParameter_throwsError(self):
+        for test_input in self.__test_input:
+            with self.assertRaises(Exception) as expected_error:
+                max([0], invalid=2)
+
+            with self.assertRaises(Exception) as actual_error:
+                Iterable(test_input).max(invalid=2)
+
+            self.assertEqual(
+                type(expected_error),
+                type(actual_error)
             )
 
     def test_min_noDefault_returnsMin(self):
@@ -248,6 +272,7 @@ class TestIterable(TestCase):
                 Iterable(test_input).min(key=key)
             )
 
+    @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
     def test_min_emptyIterableWithDefault_returnsDefault(self):
         default = -6
 
@@ -255,6 +280,27 @@ class TestIterable(TestCase):
             self.assertEqual(
                 default,
                 Iterable(test_input).min(default=default)
+            )
+
+    @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
+    def test_min_emptyIterableAndDefaultIsNone_returnsNone(self):
+        for test_input in [[], set()]:
+            self.assertEqual(
+                None,
+                Iterable(test_input).min(default=None)
+            )
+
+    def test_min_invalidKeywordParameter_throwsError(self):
+        for test_input in self.__test_input:
+            with self.assertRaises(Exception) as expected_error:
+                min([0], invalid=2)
+
+            with self.assertRaises(Exception) as actual_error:
+                Iterable(test_input).min(invalid=2)
+
+            self.assertEqual(
+                type(expected_error),
+                type(actual_error)
             )
 
     def test_reversed(self):
