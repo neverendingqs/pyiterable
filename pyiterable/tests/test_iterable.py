@@ -426,11 +426,22 @@ class TestIterable(TestCase):
                 Counter(Iterable(left).zip(*right))
             )
 
-    def test_reduce(self):
+    def test_reduce_noInitializer_returnsValue(self):
         func = lambda a, b: a + b
 
         for test_input in self.__test_input:
             self.assertEqual(
                 reduce(func, test_input),
                 Iterable(test_input).reduce(func)
+            )
+
+    def test_reduce_withInitializer_returnsValueWithInitializer(self):
+        func = lambda a, b: a + b
+
+        for test_input in self.__test_input:
+            # Extract a random item to be the initializer
+            initializer = set(test_input).pop()
+            self.assertEqual(
+                reduce(func, test_input, initializer),
+                Iterable(test_input).reduce(func, initializer)
             )
