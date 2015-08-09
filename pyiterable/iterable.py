@@ -40,6 +40,19 @@ class Iterable:
         """
         return set(self.__iterable)
 
+    def to_tuple(self):
+        """ Equivalent to the built-in function **tuple(** *iterable* **)**
+
+        :return: tuple
+
+        >>> numbers = Iterable([10, 7, 28, 7, 19, 19, 70])
+        >>> numbers
+        <pyiterable.iterable.Iterable object at 0x0130FE70>
+        >>> numbers.to_tuple()
+        (10, 7, 28, 7, 19, 19, 70)
+        """
+        return tuple(self.__iterable)
+
     # built-in equivalent transformations
     def all(self):
         """ Equivalent to the built-in function **all(** *iterable* **)**

@@ -101,6 +101,20 @@ class TestIterable(TestCase):
                 type(actual)
             )
 
+    def test_to_tuple(self):
+        for test_input in self.__test_input:
+            actual = Iterable(test_input).to_tuple()
+
+            self.assertEqual(
+                Counter(tuple(test_input)),
+                Counter(actual)
+            )
+
+            self.assertIs(
+                type(tuple()),
+                type(actual)
+            )
+
     def test_all_hasFalse_returnsFalse(self):
         test_list = [True, False, True, True]
 
