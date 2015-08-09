@@ -15,7 +15,7 @@ setup(
     url='https://github.com/neverendingqs/pyiterable',
     author='neverendingqs',
     author_email='mark.tse@neverendingqs.com',
-    license='Apache License 2.0',
+    license='MIT',
     packages=['pyiterable'],
     test_suite='nose.collector',
     tests_require=['nose'],
