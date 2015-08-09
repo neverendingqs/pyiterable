@@ -54,12 +54,12 @@ do this:
 
     from pyiterable import Iterable
     ...
-    values = ["1", "2", "5", "9"]
+    values = Iterable(["1", "2", "5", "9"])
     
-    sum = (Iterable(values)
-        .map(lambda x: int(x))
-        .filter(lambda x: x > 4)
-        .reduce(lambda a, b: a + b)
+    sum = (values
+           .map(lambda x: int(x))
+           .filter(lambda x: x > 4)
+           .reduce(lambda a, b: a + b)
     )
 
 

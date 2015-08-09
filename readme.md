@@ -6,12 +6,12 @@ Python comes with some nice built-in methods for operating on iterables, but it 
 
     from pyiterable import Iterable
     ...
-    values = ["1", "2", "5", "9"]
-
-    sum = (Iterable(values)
-        .map(lambda x: int(x))
-        .filter(lambda x: x > 4)
-        .reduce(lambda a, b: a + b)
+    values = Iterable(["1", "2", "5", "9"])
+    
+    sum = (values
+           .map(lambda x: int(x))
+           .filter(lambda x: x > 4)
+           .reduce(lambda a, b: a + b)
     )
 
 ## Inspiration
