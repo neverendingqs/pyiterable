@@ -231,3 +231,24 @@ class Iterable:
             return reduce(function, self.__iterable)
         else:
             return reduce(function, self.__iterable, initializer)
+
+    # custom transformations
+    def first(self, function=None, default=None):
+        """ Equivalent to calling **next( iter( filter(** *function, iterable* **)** *, default* **)**
+
+        :param function: keyword-only; function used to filter unwanted values
+        :param default: keyword-only value to return if *Iterable* is empty after filtered by *func*
+        :return: first value of *Iterable* filtered by *func*
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.first()
+        1
+        >>> values.first(function=lambda x: x > 5)
+        9
+        >>> values.first(function=lambda x: x > 10, default=0)
+        0
+        """
+        if function:
+            return next(iter(filter(function, self.__iterable)), default)
+        else:
+            return next(iter(self.__iterable), default)
