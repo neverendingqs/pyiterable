@@ -59,8 +59,13 @@ class TestIterable(TestCase):
         ]
 
         self.__test_sets = [set(l) for l in self.__test_lists]
+        self.__test_tuples = [tuple(l) for l in self.__test_lists]
 
-        self.__test_input = self.__test_lists + self.__test_sets
+        self.__test_input = (
+            self.__test_lists
+            + self.__test_sets
+            + self.__test_tuples
+        )
 
     def test_constructor_nonIterable_throwsError(self):
         test_inputs = [
