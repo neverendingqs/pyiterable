@@ -9,9 +9,8 @@ Classes
 -------
 
 .. toctree::
-    :maxdepth: 2
 
-    api
+    classes/iterable
 
 
 Details
@@ -21,7 +20,6 @@ Inspired by:
 * `C#'s Enumerable class <https://msdn.microsoft.com/en-us/library/system.linq.enumerable(v=vs.110).aspx>`_
 * `Apache Spark RDD Operations <http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations>`_
 * `Java stream package <https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html>`_
-
 
 
 Instead of:
@@ -61,6 +59,15 @@ do this:
            .filter(lambda x: x > 4)
            .reduce(lambda a, b: a + b)
     )
+
+
+Release
+-------
+
+0.1.0
+
+* First release!
+* *Iterable* class with equivalent built-in functions related to iterables
 
 
 Indices and tables
