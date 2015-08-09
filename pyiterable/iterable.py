@@ -10,9 +10,6 @@ class Iterable:
     def __iter__(self):
         return self.__iterable.__iter__()
 
-    def __next__(self):
-        return self.__iterable.__next__()
-
     def __len__(self):
         return len(self.__iterable)
 
