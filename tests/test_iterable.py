@@ -89,7 +89,7 @@ class TestIterable(TestCase):
                     Counter(list(test_input)),
                     Counter(actual)
                 )
-    
+
                 self.assertIs(
                     type([]),
                     type(actual)
@@ -561,3 +561,28 @@ class TestIterable(TestCase):
                     default,
                     Iterable(test_input).first(function=func, default=default)
                 )
+
+    def test_mapmany_eachElementMapsToList_returnsFlattenedIterable(self):
+        function = lambda x: [x, x]
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                expected_output = list(test_input) + list(test_input)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(test_input).mapmany(function).to_list())
+                )
+
+    def test_mapmany_eachElementMapsToTuple_returnsFlattenedIterable(self):
+        function = lambda x: (x, x)
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                expected_output = list(test_input) + list(test_input)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(test_input).mapmany(function).to_list())
+                )
+

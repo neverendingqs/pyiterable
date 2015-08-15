@@ -1,4 +1,5 @@
 from functools import reduce
+import itertools
 
 
 class Iterable:
@@ -11,7 +12,7 @@ class Iterable:
         return self.__iterable.__iter__()
 
     def __len__(self):
-        return len(self.__iterable)
+        return len(list(self.__iterable))
 
     # built-in equivalent data structures
     def to_list(self):
@@ -252,3 +253,6 @@ class Iterable:
             return next(iter(filter(function, self.__iterable)), default)
         else:
             return next(iter(self.__iterable), default)
+
+    def mapmany(self, function):
+        return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
