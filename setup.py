@@ -18,6 +18,6 @@ setup(
     license='MIT',
     packages=['pyiterable'],
     test_suite='nose.collector',
-    tests_require=['nose'],
+    tests_require=['nose', 'unittest2'],
     zip_safe=False
 )
