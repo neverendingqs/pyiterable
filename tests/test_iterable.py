@@ -1,7 +1,6 @@
 from collections import Counter
 from functools import reduce
-from unittest2 import TestCase
-from unittest2 import skipIf
+from unittest2 import skipIf, TestCase
 import sys
 
 from pyiterable import Iterable
