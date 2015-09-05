@@ -8,8 +8,8 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3 :: Only'
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     url='https://github.com/neverendingqs/pyiterable',
