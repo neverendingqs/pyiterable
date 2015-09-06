@@ -2,6 +2,8 @@
 
 Python comes with some nice built-in methods for operating on iterables, but it can get messy really quickly if you want to transform an iterable multiple times. Write more expressive code by chaining built-in transformations with this module.
 
+Get it via `pip install pyiterable`!
+
 ## Example
 
     from pyiterable import Iterable
@@ -20,5 +22,8 @@ Python comes with some nice built-in methods for operating on iterables, but it 
 * [Apache Spark RDD Operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations)
 * [Java stream package](https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html)
 
-## API Docs
-<link to come>
+## Links
+
+* API docs: [http://pyiterable.readthedocs.org/en/latest/](http://pyiterable.readthedocs.org/en/latest/)
+* Source: [https://github.com/neverendingqs/pyiterable](https://github.com/neverendingqs/pyiterable)
+* Package: [https://pypi.python.org/pypi/pyiterable/](https://pypi.python.org/pypi/pyiterable/)
