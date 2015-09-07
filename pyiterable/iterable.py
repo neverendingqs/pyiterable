@@ -9,7 +9,7 @@ class Iterable:
         self.__iterable = iterable
 
     def __iter__(self):
-        return self.__iterable.__iter__()
+        return iter(self.__iterable)
 
     def __len__(self):
         return len(list(self.__iterable))
