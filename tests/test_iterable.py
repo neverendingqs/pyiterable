@@ -797,3 +797,33 @@ class TestIterable(TestCase):
                     Counter(expected_output),
                     Counter(Iterable(left).union(Iterable(right)).to_list())
                 )
+
+    def test_union_leftIsEmpty_returnsAllDistinctElementsOfRight(self):
+        # Add a duplicate element
+        tests = list(map(lambda t: t + t[:1], self.__test_lists))
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: set(t), tests)))
+        tests.extend(list(map(lambda t: tuple(t), tests)))
+
+        for right in tests:
+            with self.subTest(right=right):
+                self.assertEqual(
+                    Counter(set(right)),
+                    Counter(Iterable([]).union(right).to_list())
+                )
+
+    def test_union_rightIsEmpty_returnsAllDistinctElementsOfLeft(self):
+        # Add a duplicate element
+        tests = list(map(lambda t: t + t[:1], self.__test_lists))
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: set(t), tests)))
+        tests.extend(list(map(lambda t: tuple(t), tests)))
+
+        for left in tests:
+            with self.subTest(left=left):
+                self.assertEqual(
+                    Counter(set(left)),
+                    Counter(Iterable(left).union([]).to_list())
+                )
