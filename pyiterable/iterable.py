@@ -272,6 +272,17 @@ class Iterable:
 
     # List-like transformations
     def concat(self, iterable):
+        """
+        Equivalent to calling **list(** *left* **) + list(** *right* **)**
+
+        >>> left = [2, 10, 2, 2, 5, 9, 10]
+        >>> right = [13, -5, 1982, -10, 2384, 1982, 98]
+        >>> Iterable(left).concat(right).to_list()
+        [2, 10, 2, 2, 5, 9, 10, 13, -5, 1982, -10, 2384, 1982, 98]
+
+        :param iterable: iterable to concat with *Iterable*
+        :return: New *Iterable* containing the elements from *self* and *iterable*
+        """
         return Iterable(list(self.__iterable) + list(iterable))
 
     # Set-like transformations
