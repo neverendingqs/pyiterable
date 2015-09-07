@@ -1,3 +1,12 @@
 language: python
-install: "pip install tox"
-script: "tox"
+python:
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+install:
+  - pip install unittest2 coveralls
+script:
+  - nosetests --exe --with-coverage --cover-package=pyiterable
+after_success:
+    - coveralls
