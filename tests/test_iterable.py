@@ -44,8 +44,7 @@ class TestIterableTestClazz:
 
 class TestIterable(TestCase):
 
-    @staticmethod
-    def __extend_test(test):
+    def __extend_test(self, test):
         """
         Extends test to different iterable types,
         making it easier to add/remove iterable types we want to test for in this test suite.
