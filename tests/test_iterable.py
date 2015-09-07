@@ -655,6 +655,113 @@ class TestIterable(TestCase):
                     Counter(Iterable(left).concat([]).to_list())
                 )
 
+    def test_difference_leftAndRightHasSameContents_returnsEmptyIterable(self):
+        tests = [(left, deepcopy(left)) for left in self.__test_inputs]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                self.assertEqual(
+                    Counter(list()),
+                    Counter(Iterable(left).difference(right).to_list())
+                )
+
+    def test_difference_leftIsSupersetOfRight_returnsElementsFromLeft(self):
+        # Remove an element from right
+        tests_list = [(left, left[:-1]) for left in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                expected_output = set(left).difference(set(right))
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).difference(right).to_list())
+                )
+
+    def test_difference_leftIsSubsetOfRight_returnsEmptyIterable(self):
+        # Remove an element from right
+        tests_list = [(list(deepcopy(right))[1:], right) for right in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                self.assertEqual(
+                    Counter(list()),
+                    Counter(Iterable(left).difference(right).to_list())
+                )
+
+    def test_difference_leftAndRightHasSomeIntersectingValues_returnsElementsFromLeft(self):
+        # Remove an element from both left and right
+        tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                expected_output = set(left).difference(set(right))
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).difference(right).to_list())
+                )
+
+    def test_difference_leftAndRightHasNoIntersectingValues_returnsAllDistinctElementsOfLeft(self):
+        tests_list = [
+            ([True], [False]),
+            ([13, -5, 1982], [-10, 2384, 98]),
+            ([6.837, -374.6, -2.73], [3.210, 2.038, -3927.23]),
+            ("ab", "cd"),
+            (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
+            ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
+        ]
+        tests = self._extend_test_tuples(tests_list)
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                self.assertEqual(
+                    Counter(set(left)),
+                    Counter(Iterable(left).difference(right).to_list())
+                )
+
+    def test_difference_leftIsEmpty_returnsEmptyIterable(self):
+        # Add a duplicate element
+        tests_list = list(map(lambda t: t + t[:1], self.__test_lists))
+        tests = self.__extend_tests(tests_list)
+
+        for right in tests:
+            with self.subTest(right=right):
+                self.assertEqual(
+                    Counter(list()),
+                    Counter(Iterable([]).difference(right).to_list())
+                )
+
+    def test_difference_rightIsEmpty_returnsAllDistinctElementsOfLeft(self):
+        # Add a duplicate element
+        tests_list = list(map(lambda t: t + t[:1], self.__test_lists))
+        tests = self.__extend_tests(tests_list)
+
+        for left in tests:
+            with self.subTest(left=left):
+                self.assertEqual(
+                    Counter(set(left)),
+                    Counter(Iterable(left).difference([]).to_list())
+                )
+
     def test_distinct_returnsDistinctIterable(self):
         tests_list = [
             [True, False, False, True, True],
