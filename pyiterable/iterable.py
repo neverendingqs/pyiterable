@@ -282,3 +282,17 @@ class Iterable:
         :return: New *Iterable* containing only the distinct elements; order not preserved
         """
         return Iterable(set(self.__iterable))
+
+    def union(self, iterable):
+        """
+        Equivalent to calling **set(** *left* **).union( set(** *right* **) )**
+
+        >>> left = [2, 10, 2, 2, 5, 9, 10]
+        >>> right = [13, -5, 1982, -10, 2384, 1982, 98]
+        >>> list(Iterable(left).union(right))
+        [2, 98, 5, 9, 10, 13, 2384, -10, -5, 1982]
+
+        :param iterable: iterable to union with *Iterable*
+        :return: *Iterable* with distinct values in both *self* and *iterable*
+        """
+        return Iterable(set(self.__iterable).union(set(iterable)))

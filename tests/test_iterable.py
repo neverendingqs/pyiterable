@@ -1,4 +1,5 @@
 from collections import Counter
+from copy import deepcopy
 from functools import reduce
 from unittest2 import skipIf, TestCase
 import sys
@@ -601,4 +602,105 @@ class TestIterable(TestCase):
                 self.assertEqual(
                     list(set(test_input)),
                     Iterable(test_input).distinct().to_list()
+                )
+
+    def test_union_leftAndRightHasSameContents_returnsLeft(self):
+        tests = [(left, deepcopy(left)) for left in self.__test_input]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = set(test_input[0])
+                right = set(test_input[1])
+
+                expected_output = list(left)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).union(right).to_list())
+                )
+
+    def test_union_leftIsSupersetOfRight_returnsLeft(self):
+        # Remove an element from right
+        tests = [(left, list(deepcopy(left))[:-1]) for left in self.__test_input]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = set(test_input[0])
+                right = set(test_input[1])
+
+                expected_output = list(left)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).union(right).to_list())
+                )
+
+    def test_union_leftIsSubsetOfRight_returnsRight(self):
+        # Remove an element from right
+        tests = [(list(deepcopy(right))[1:], right) for right in self.__test_input]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = set(test_input[0])
+                right = set(test_input[1])
+
+                expected_output = list(right)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).union(right).to_list())
+                )
+
+    def test_union_leftAndRightHasSomeIntersectingValues_returnsUnionOfLeftAndRight(self):
+        # Remove an element from both left and right
+        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_input]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = set(test_input[0])
+                right = set(test_input[1])
+
+                expected_output = list(left.union(right))
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).union(right).to_list())
+                )
+
+    def test_union_leftAndRightHasNoIntersectingValues_returnsLeftUnionRight(self):
+        tests = [
+            ([True], [False]),
+            ([13, -5, 1982], [-10, 2384, 98]),
+            ([6.837, -374.6, -2.73], [3.210, 2.038, -3927.23]),
+            ("ab", "cd"),
+            (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
+            ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
+        ]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = set(test_input[0])
+                right = set(test_input[1])
+
+                expected_output = list(left) + list(right)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).union(right).to_list())
+                )
+
+    def test_union_twoIterables_returnsProperUnion(self):
+         # Remove an element from both left and right
+        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_input]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = set(test_input[0])
+                right = set(test_input[1])
+
+                expected_output = list(left.union(right))
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).union(Iterable(right)).to_list())
                 )
