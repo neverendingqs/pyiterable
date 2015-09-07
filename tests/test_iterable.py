@@ -61,6 +61,13 @@ class TestIterable(TestCase):
 
         return new_tests
 
+    def _extend_test_tuples(self, tests):
+        new_tests = list(map(lambda t: (list(t[0]), list(t[1])), tests))
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+
+        return new_tests
+
     def setUp(self):
         self.__bool_list = [True, False, False, True, False, False]
         self.__int_list = [1, 2, 2, 5, 0, -8]
@@ -571,7 +578,7 @@ class TestIterable(TestCase):
                 )
 
     def test_concat_leftAndRightHaveNoIntersectingValues_returnsLeftConcatRight(self):
-        tests = [
+        tests_list = [
             ([True], [False]),
             ([13, -5, 1982], [-10, 2384, 98]),
             ([6.837, -374.6, -2.73], [3.210, 2.038, -3927.23]),
@@ -579,10 +586,7 @@ class TestIterable(TestCase):
             (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
             ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
         ]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -598,11 +602,8 @@ class TestIterable(TestCase):
 
     def test_concat_leftAndRightHasSomeIntersectingValues_returnsLeftConcatRight(self):
         # Remove an element from both left and right
-        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -650,12 +651,7 @@ class TestIterable(TestCase):
                     Iterable(test_input).distinct().to_list()
                 )
 
-    def _extend_union_test_tuples(self, tests):
-        new_tests = list(map(lambda t: (list(t[0]), list(t[1])), tests))
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
 
-        return new_tests
 
     def test_union_leftAndRightHasSameContents_returnsLeft(self):
         tests = [(left, deepcopy(left)) for left in self.__test_input]
@@ -675,7 +671,7 @@ class TestIterable(TestCase):
     def test_union_leftIsSupersetOfRight_returnsLeft(self):
         # Remove an element from right
         tests_list = [(left, left[:-1]) for left in self.__test_lists]
-        tests = self._extend_union_test_tuples(tests_list)
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -692,7 +688,7 @@ class TestIterable(TestCase):
     def test_union_leftIsSubsetOfRight_returnsRight(self):
         # Remove an element from right
         tests_list = [(list(deepcopy(right))[1:], right) for right in self.__test_lists]
-        tests = self._extend_union_test_tuples(tests_list)
+        tests = self._extend_test_tuples(tests_list)
         
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -709,7 +705,7 @@ class TestIterable(TestCase):
     def test_union_leftAndRightHasSomeIntersectingValues_returnsUnionOfLeftAndRight(self):
         # Remove an element from both left and right
         tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
-        tests = self._extend_union_test_tuples(tests_list)
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -732,7 +728,7 @@ class TestIterable(TestCase):
             (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
             ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
         ]
-        tests = self._extend_union_test_tuples(tests_list)
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -749,7 +745,7 @@ class TestIterable(TestCase):
     def test_union_twoIterables_returnsProperUnion(self):
         # Remove an element from both left and right
         tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_input]
-        tests = self._extend_union_test_tuples(tests_list)
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
