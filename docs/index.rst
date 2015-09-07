@@ -2,7 +2,12 @@ Pyiterable API Documentation
 ============================
 Python comes with some nice built-in methods for operating on iterables, but it can get messy really quickly if you want to transform an iterable multiple times. Write more expressive code by chaining built-in transformations with this module.
 
-Scroll down for examples.
+The module is available on `PyPI <https://pypi.python.org/pypi/pyiterable>`_ via ``pip``:
+
+``pip install pyiterable``
+
+
+Examples below.
 
 
 Classes
