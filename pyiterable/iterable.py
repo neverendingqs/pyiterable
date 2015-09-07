@@ -286,6 +286,20 @@ class Iterable:
         return Iterable(list(self.__iterable) + list(iterable))
 
     # Set-like transformations
+    def difference(self, iterable):
+        """
+        Equivalent to calling **set(** *left* **).difference( set (** *iterable* **) )**
+
+        >>> left = [2, 10, 1982, -5, 9, 10]
+        >>> right = [1982, -10, -5, 1982, 98]
+        >>> Iterable(left).difference(right).to_list()
+        [9, 2, 10]
+
+        :param iterable: iterable to check for difference
+        :return: New *Iterable* containing elements found in *self* but not *iterable*
+        """
+        return Iterable(set(self.__iterable).difference(set(iterable)))
+
     def distinct(self):
         """
         Equivalent to calling **set(** *iterable* **)**
