@@ -597,6 +597,9 @@ class TestIterable(TestCase):
             [TestIterableTestClazz(5), TestIterableTestClazz("cloud"), TestIterableTestClazz("cloud")]
         ]
 
+        tests.extend([set(t) for t in tests])
+        tests.extend([tuple(t) for t in tests])
+
         for test_input in tests:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
