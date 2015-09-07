@@ -269,3 +269,16 @@ class Iterable:
         :return: *Iterable* comprised of every element returned by **function**
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
+
+    # Set-like transformations
+    def distinct(self):
+        """
+        Equivalent to calling **set(** *iterable* **)**
+
+        >>> values = Iterable([2, 10, 2, 2, 5, 9, 10])
+        >>> values.distinct().to_list()
+        [9, 2, 10, 5]
+
+        :return: New *Iterable* containing only the distinct elements; order not preserved
+        """
+        return Iterable(set(self.__iterable))
