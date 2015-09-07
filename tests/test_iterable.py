@@ -238,11 +238,7 @@ class TestIterable(TestCase):
 
     def test_max_noDefaultWithKeyArgument_returnsMax(self):
         key = lambda x: x.stub
-
-        test_inputs = [
-            self.__clazz_list,
-            set(self.__clazz_list)
-        ]
+        test_inputs = self.__extend_test(self.__clazz_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -295,11 +291,7 @@ class TestIterable(TestCase):
 
     def test_min_noDefaultWithKeyArgument_returnsMin(self):
         key = lambda x: x.stub
-
-        test_inputs = [
-            self.__clazz_list,
-            set(self.__clazz_list)
-        ]
+        test_inputs = self.__extend_test(self.__clazz_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -393,8 +385,9 @@ class TestIterable(TestCase):
 
     def test_sorted_withKey_returnsSortedIterable(self):
         key = lambda x: x.stub
+        test_inputs = self.__extend_test(self.__clazz_list)
 
-        for test_input in [self.__clazz_list, set(self.__clazz_list)]:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 sorted_iterable = (Iterable(test_input)
                                    .sorted(key=key)
@@ -406,12 +399,7 @@ class TestIterable(TestCase):
                 )
 
     def test_sum_noStartValue_returnsSum(self):
-        test_inputs = [
-            self.__int_list,
-            self.__float_list,
-            set(self.__int_list),
-            set(self.__float_list)
-        ]
+        test_inputs = self.__extend_test(self.__int_list) + self.__extend_test(self.__float_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -421,14 +409,8 @@ class TestIterable(TestCase):
                 )
 
     def test_sum_withStartValue_returnsSumWithStartValue(self):
-        test_inputs = [
-            self.__int_list,
-            self.__float_list,
-            set(self.__int_list),
-            set(self.__float_list)
-        ]
-
         start = 10
+        test_inputs = self.__extend_test(self.__int_list) + self.__extend_test(self.__float_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
