@@ -45,14 +45,21 @@ class TestIterableTestClazz:
 class TestIterable(TestCase):
 
     @staticmethod
-    def __extend_test(iterable):
-        tests = [
-            list(iterable),
-            set(iterable),
-            tuple(iterable)
+    def __extend_test(test):
+        new_tests = [
+            list(test),
+            set(test),
+            tuple(test)
         ]
 
-        return tests
+        return new_tests
+
+    def __extend_tests(self, tests):
+        new_tests = []
+        for test in tests:
+            new_tests.extend(self.__extend_test(test))
+
+        return new_tests
 
     def setUp(self):
         self.__bool_list = [True, False, False, True, False, False]
@@ -70,15 +77,7 @@ class TestIterable(TestCase):
             self.__string_list,
             self.__clazz_list
         ]
-
-        self.__test_sets = [set(l) for l in self.__test_lists]
-        self.__test_tuples = [tuple(l) for l in self.__test_lists]
-
-        self.__test_input = (
-            self.__test_lists
-            + self.__test_sets
-            + self.__test_tuples
-        )
+        self.__test_input = self.__extend_tests(self.__test_lists)
 
     def test_constructor_nonIterable_throwsError(self):
         test_inputs = [
@@ -634,7 +633,7 @@ class TestIterable(TestCase):
                 )
 
     def test_distinct_returnsDistinctIterable(self):
-        tests = [
+        tests_list = [
             [True, False, False, True, True],
             [3, 2, 2, -5, 7],
             [3.42, 828.3, -6.4, -6.4, 5.99],
@@ -642,9 +641,7 @@ class TestIterable(TestCase):
             ["orange", "black", "blue", "black", "white"],
             [TestIterableTestClazz(5), TestIterableTestClazz("cloud"), TestIterableTestClazz("cloud")]
         ]
-
-        tests.extend([set(t) for t in tests])
-        tests.extend([tuple(t) for t in tests])
+        tests = self.__extend_tests(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
