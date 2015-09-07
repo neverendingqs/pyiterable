@@ -44,6 +44,50 @@ class TestIterableTestClazz:
 
 class TestIterable(TestCase):
 
+    def __extend_test(self, test):
+        """
+        Extends test to different iterable types,
+        making it easier to add/remove iterable types we want to test for in this test suite.
+
+        :param test: an iterable representing the test input
+        :return: list of test inputs, each of the type we want to test for
+        """
+        new_tests = [
+            list(test),
+            set(test),
+            tuple(test)
+        ]
+
+        return new_tests
+
+    def __extend_tests(self, tests):
+        """
+        Extends tests to different iterable types,
+        making it easier to add/remove iterable types we want to test for in this test suite.
+
+        :param tests: an iterable containing multiple test inputs
+        :return: list of test inputs, represented by all iterable types we want to test for
+        """
+        new_tests = []
+        for test in tests:
+            new_tests.extend(self.__extend_test(test))
+
+        return new_tests
+
+    def _extend_test_tuples(self, tests):
+        """
+        Extends tests of type tuple(left_iterable, right_iterable),
+        making it easier to add/remove iterable types we want to test for in this test suite.
+
+        :param tests: an iterable of tuples of the form (left_iterable, right_iterable)
+        :return: list of test inputs of the form, represented by all iterable types we want to test for
+        """
+        new_tests = list(map(lambda t: (list(t[0]), list(t[1])), tests))
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+
+        return new_tests
+
     def setUp(self):
         self.__bool_list = [True, False, False, True, False, False]
         self.__int_list = [1, 2, 2, 5, 0, -8]
@@ -60,15 +104,7 @@ class TestIterable(TestCase):
             self.__string_list,
             self.__clazz_list
         ]
-
-        self.__test_sets = [set(l) for l in self.__test_lists]
-        self.__test_tuples = [tuple(l) for l in self.__test_lists]
-
-        self.__test_input = (
-            self.__test_lists
-            + self.__test_sets
-            + self.__test_tuples
-        )
+        self.__test_inputs = self.__extend_tests(self.__test_lists)
 
     def test_constructor_nonIterable_throwsError(self):
         test_inputs = [
@@ -83,7 +119,7 @@ class TestIterable(TestCase):
                     Iterable(test_input)
 
     def test_to_list(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 actual = Iterable(test_input).to_list()
                 self.assertEqual(
@@ -97,7 +133,7 @@ class TestIterable(TestCase):
                 )
 
     def test_to_set(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 actual = Iterable(test_input).to_set()
     
@@ -112,7 +148,7 @@ class TestIterable(TestCase):
                 )
 
     def test_to_tuple(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 actual = Iterable(test_input).to_tuple()
     
@@ -127,14 +163,10 @@ class TestIterable(TestCase):
                 )
 
     def test_all_hasFalse_returnsFalse(self):
-        test_list = [True, False, True, True]
+        test = [True, False, True, True]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     all(test_input),
@@ -142,14 +174,10 @@ class TestIterable(TestCase):
                 )
 
     def test_all_onlyHasTrue_returnsTrue(self):
-        test_list = [True for i in range(7)]
+        test = [True for i in range(7)]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     all(test_input),
@@ -157,14 +185,10 @@ class TestIterable(TestCase):
                 )
 
     def test_any_hasTrue_returnsTrue(self):
-        test_list = [True, False, True, True]
+        test = [True, False, True, True]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     any(test_input),
@@ -172,14 +196,10 @@ class TestIterable(TestCase):
                 )
 
     def test_any_onlyHasFalse_returnsFalse(self):
-        test_list = [False for i in range(7)]
+        test = [False for i in range(7)]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     any(test_input),
@@ -187,7 +207,7 @@ class TestIterable(TestCase):
                 )
 
     def test_enumerate_defaultStart(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     Counter(list(enumerate(test_input))),
@@ -197,7 +217,7 @@ class TestIterable(TestCase):
     @skipIf(sys.version_info < (2, 6), "'start' keyword-only argument is new in 2.6")
     def test_enumerate_customStart(self):
         start = 3
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     Counter(list(enumerate(test_input, start))),
@@ -205,7 +225,7 @@ class TestIterable(TestCase):
                 )
 
     def test_filter(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 # Extract a random item to filter on
                 filtered_item = set(test_input).pop()
@@ -217,7 +237,7 @@ class TestIterable(TestCase):
                 )
 
     def test_len(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     len(list(test_input)),
@@ -225,7 +245,7 @@ class TestIterable(TestCase):
                 )
 
     def test_map(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 func = lambda x: str(x)[0]
     
@@ -235,7 +255,7 @@ class TestIterable(TestCase):
                 )
 
     def test_max_noDefault_returnsMax(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     max(test_input),
@@ -244,11 +264,7 @@ class TestIterable(TestCase):
 
     def test_max_noDefaultWithKeyArgument_returnsMax(self):
         key = lambda x: x.stub
-
-        test_inputs = [
-            self.__clazz_list,
-            set(self.__clazz_list)
-        ]
+        test_inputs = self.__extend_test(self.__clazz_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -261,7 +277,7 @@ class TestIterable(TestCase):
     def test_max_emptyIterableWithDefault_returnsDefault(self):
         default = 7
 
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
@@ -270,7 +286,7 @@ class TestIterable(TestCase):
 
     @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
     def test_max_emptyIterableAndDefaultIsNone_returnsNone(self):
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -278,7 +294,7 @@ class TestIterable(TestCase):
                 )
 
     def test_max_invalidKeywordParameter_throwsError(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 with self.assertRaises(Exception) as expected_error:
                     max([0], invalid=2)
@@ -292,7 +308,7 @@ class TestIterable(TestCase):
                 )
 
     def test_min_noDefault_returnsMin(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     min(test_input),
@@ -301,11 +317,7 @@ class TestIterable(TestCase):
 
     def test_min_noDefaultWithKeyArgument_returnsMin(self):
         key = lambda x: x.stub
-
-        test_inputs = [
-            self.__clazz_list,
-            set(self.__clazz_list)
-        ]
+        test_inputs = self.__extend_test(self.__clazz_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -318,7 +330,7 @@ class TestIterable(TestCase):
     def test_min_emptyIterableWithDefault_returnsDefault(self):
         default = -6
 
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
@@ -327,7 +339,7 @@ class TestIterable(TestCase):
 
     @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
     def test_min_emptyIterableAndDefaultIsNone_returnsNone(self):
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -335,7 +347,7 @@ class TestIterable(TestCase):
                 )
 
     def test_min_invalidKeywordParameter_throwsError(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 with self.assertRaises(Exception) as expected_error:
                     min([0], invalid=2)
@@ -372,7 +384,7 @@ class TestIterable(TestCase):
                 )
 
     def test_sorted_noOptionalArguments_returnsSortedIterable(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 sorted_iterable = (Iterable(test_input)
                                    .sorted()
@@ -386,7 +398,7 @@ class TestIterable(TestCase):
     def test_sorted_reverse_returnsReversedSortedIterable(self):
         reversed_sort = True
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 sorted_iterable = (Iterable(test_input)
                                    .sorted(reverse=reversed_sort)
@@ -399,8 +411,9 @@ class TestIterable(TestCase):
 
     def test_sorted_withKey_returnsSortedIterable(self):
         key = lambda x: x.stub
+        test_inputs = self.__extend_test(self.__clazz_list)
 
-        for test_input in [self.__clazz_list, set(self.__clazz_list)]:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 sorted_iterable = (Iterable(test_input)
                                    .sorted(key=key)
@@ -412,12 +425,7 @@ class TestIterable(TestCase):
                 )
 
     def test_sum_noStartValue_returnsSum(self):
-        test_inputs = [
-            self.__int_list,
-            self.__float_list,
-            set(self.__int_list),
-            set(self.__float_list)
-        ]
+        test_inputs = self.__extend_test(self.__int_list) + self.__extend_test(self.__float_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -427,14 +435,8 @@ class TestIterable(TestCase):
                 )
 
     def test_sum_withStartValue_returnsSumWithStartValue(self):
-        test_inputs = [
-            self.__int_list,
-            self.__float_list,
-            set(self.__int_list),
-            set(self.__float_list)
-        ]
-
         start = 10
+        test_inputs = self.__extend_test(self.__int_list) + self.__extend_test(self.__float_list)
 
         for test_input in test_inputs:
             with self.subTest(test_input=test_input):
@@ -444,8 +446,8 @@ class TestIterable(TestCase):
                 )
 
     def test_zip_twoIterables_returnsProperZip(self):
-        for left in self.__test_input:
-            for right in self.__test_input:
+        for left in self.__test_inputs:
+            for right in self.__test_inputs:
                 with self.subTest(left=left, right=right):
                     self.assertEqual(
                         Counter(list(zip(left, right))),
@@ -453,9 +455,9 @@ class TestIterable(TestCase):
                     )
 
     def test_zip_multipleIterables_returnsProperZip(self):
-        right = self.__test_input
+        right = self.__test_inputs
 
-        for left in self.__test_input:
+        for left in self.__test_inputs:
             with self.subTest(left=left, right=right):
                 self.assertEqual(
                     Counter(list(zip(left, *right))),
@@ -463,8 +465,8 @@ class TestIterable(TestCase):
                 )
 
     def test_zip_iterableWithIterableObject_returnsProperZip(self):
-        for left in self.__test_input:
-            for right in self.__test_input:
+        for left in self.__test_inputs:
+            for right in self.__test_inputs:
                 with self.subTest(left=left, right=right):
                     self.assertEqual(
                         Counter(zip(left, right)),
@@ -472,8 +474,8 @@ class TestIterable(TestCase):
                     )
 
     def test_zip_iterableWithMultipleIterableObjects_returnsProperZip(self):
-        right = list(map(lambda x: Iterable(x), self.__test_input))
-        for left in self.__test_input:
+        right = list(map(lambda x: Iterable(x), self.__test_inputs))
+        for left in self.__test_inputs:
             with self.subTest(left=left, right=right):
                 self.assertEqual(
                     Counter(zip(left, *right)),
@@ -483,7 +485,7 @@ class TestIterable(TestCase):
     def test_reduce_noInitializer_returnsValue(self):
         func = lambda a, b: a + b
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     reduce(func, test_input),
@@ -493,7 +495,7 @@ class TestIterable(TestCase):
     def test_reduce_withInitializer_returnsValueWithInitializer(self):
         func = lambda a, b: a + b
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 # Extract a random item to be the initializer
                 initializer = set(test_input).pop()
@@ -503,7 +505,7 @@ class TestIterable(TestCase):
                 )
 
     def test_first_noArgs_returnsFirstElement(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 expected_first = list(test_input)[0]
 
@@ -513,7 +515,7 @@ class TestIterable(TestCase):
                 )
 
     def test_first_withFunc_returnsFirstMatchingElement(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 expected_first = list(test_input)[-1]
                 func = lambda x: x == expected_first
@@ -524,7 +526,7 @@ class TestIterable(TestCase):
                 )
 
     def test_first_emptyIterableWithNoDefault_returnsNone(self):
-        for test_input in [[], set(), tuple()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -533,7 +535,7 @@ class TestIterable(TestCase):
 
     def test_first_emptyIterableWithDefault_returnsDefault(self):
         default = "default"
-        for test_input in [[], set(), tuple()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
@@ -544,7 +546,7 @@ class TestIterable(TestCase):
         # create a func that should not match anything
         func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -556,7 +558,7 @@ class TestIterable(TestCase):
         func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
         default = "default"
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
@@ -566,7 +568,7 @@ class TestIterable(TestCase):
     def test_mapmany_eachElementMapsToList_returnsFlattenedIterable(self):
         function = lambda x: [x, x]
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 expected_output = list(test_input) + list(test_input)
 
@@ -578,7 +580,7 @@ class TestIterable(TestCase):
     def test_mapmany_eachElementMapsToTuple_returnsFlattenedIterable(self):
         function = lambda x: (x, x)
 
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 expected_output = list(test_input) + list(test_input)
 
@@ -588,7 +590,7 @@ class TestIterable(TestCase):
                 )
 
     def test_concat_leftAndRightHasSameContents_returnsLeftConcatRight(self):
-        for test_input in self.__test_input:
+        for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     Counter(list(test_input) + list(test_input)),
@@ -596,7 +598,7 @@ class TestIterable(TestCase):
                 )
 
     def test_concat_leftAndRightHaveNoIntersectingValues_returnsLeftConcatRight(self):
-        tests = [
+        tests_list = [
             ([True], [False]),
             ([13, -5, 1982], [-10, 2384, 98]),
             ([6.837, -374.6, -2.73], [3.210, 2.038, -3927.23]),
@@ -604,10 +606,7 @@ class TestIterable(TestCase):
             (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
             ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
         ]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -623,11 +622,8 @@ class TestIterable(TestCase):
 
     def test_concat_leftAndRightHasSomeIntersectingValues_returnsLeftConcatRight(self):
         # Remove an element from both left and right
-        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -642,7 +638,7 @@ class TestIterable(TestCase):
                 )
 
     def test_concat_leftIsEmpty_returnsRight(self):
-        for right in self.__test_input:
+        for right in self.__test_inputs:
             with self.subTest(right=right):
                 self.assertEqual(
                     Counter(list(right)),
@@ -650,7 +646,7 @@ class TestIterable(TestCase):
                 )
 
     def test_concat_rightIsEmpty_returnsLeft(self):
-        for left in self.__test_input:
+        for left in self.__test_inputs:
             with self.subTest(left=left):
                 self.assertEqual(
                     Counter(list(left)),
@@ -658,7 +654,7 @@ class TestIterable(TestCase):
                 )
 
     def test_distinct_returnsDistinctIterable(self):
-        tests = [
+        tests_list = [
             [True, False, False, True, True],
             [3, 2, 2, -5, 7],
             [3.42, 828.3, -6.4, -6.4, 5.99],
@@ -666,9 +662,7 @@ class TestIterable(TestCase):
             ["orange", "black", "blue", "black", "white"],
             [TestIterableTestClazz(5), TestIterableTestClazz("cloud"), TestIterableTestClazz("cloud")]
         ]
-
-        tests.extend([set(t) for t in tests])
-        tests.extend([tuple(t) for t in tests])
+        tests = self.__extend_tests(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -677,8 +671,10 @@ class TestIterable(TestCase):
                     Iterable(test_input).distinct().to_list()
                 )
 
+
+
     def test_union_leftAndRightHasSameContents_returnsLeft(self):
-        tests = [(left, deepcopy(left)) for left in self.__test_input]
+        tests = [(left, deepcopy(left)) for left in self.__test_inputs]
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -694,11 +690,8 @@ class TestIterable(TestCase):
 
     def test_union_leftIsSupersetOfRight_returnsLeft(self):
         # Remove an element from right
-        tests = [(left, left[:-1]) for left in self.__test_lists]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests_list = [(left, left[:-1]) for left in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -714,11 +707,8 @@ class TestIterable(TestCase):
 
     def test_union_leftIsSubsetOfRight_returnsRight(self):
         # Remove an element from right
-        tests = [(list(deepcopy(right))[1:], right) for right in self.__test_lists]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests_list = [(list(deepcopy(right))[1:], right) for right in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
         
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -734,11 +724,8 @@ class TestIterable(TestCase):
 
     def test_union_leftAndRightHasSomeIntersectingValues_returnsUnionOfLeftAndRight(self):
         # Remove an element from both left and right
-        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -753,7 +740,7 @@ class TestIterable(TestCase):
                 )
 
     def test_union_leftAndRightHasNoIntersectingValues_returnsLeftUnionRight(self):
-        tests = [
+        tests_list = [
             ([True], [False]),
             ([13, -5, 1982], [-10, 2384, 98]),
             ([6.837, -374.6, -2.73], [3.210, 2.038, -3927.23]),
@@ -761,10 +748,7 @@ class TestIterable(TestCase):
             (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
             ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
         ]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -780,11 +764,8 @@ class TestIterable(TestCase):
 
     def test_union_twoIterables_returnsProperUnion(self):
         # Remove an element from both left and right
-        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_input]
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
-        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_inputs]
+        tests = self._extend_test_tuples(tests_list)
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
@@ -800,11 +781,8 @@ class TestIterable(TestCase):
 
     def test_union_leftIsEmpty_returnsAllDistinctElementsOfRight(self):
         # Add a duplicate element
-        tests = list(map(lambda t: t + t[:1], self.__test_lists))
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: set(t), tests)))
-        tests.extend(list(map(lambda t: tuple(t), tests)))
+        tests_list = list(map(lambda t: t + t[:1], self.__test_lists))
+        tests = self.__extend_tests(tests_list)
 
         for right in tests:
             with self.subTest(right=right):
@@ -815,11 +793,8 @@ class TestIterable(TestCase):
 
     def test_union_rightIsEmpty_returnsAllDistinctElementsOfLeft(self):
         # Add a duplicate element
-        tests = list(map(lambda t: t + t[:1], self.__test_lists))
-
-        # Add test inputs with different iterable types
-        tests.extend(list(map(lambda t: set(t), tests)))
-        tests.extend(list(map(lambda t: tuple(t), tests)))
+        tests_list = list(map(lambda t: t + t[:1], self.__test_lists))
+        tests = self.__extend_tests(tests_list)
 
         for left in tests:
             with self.subTest(left=left):
