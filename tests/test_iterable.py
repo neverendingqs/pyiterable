@@ -650,13 +650,6 @@ class TestIterable(TestCase):
                     Iterable(test_input).distinct().to_list()
                 )
 
-    def _extend_union_tests(self, tests):
-        new_tests = list(map(lambda t: list(t), tests))
-        new_tests.extend(list(map(lambda t: set(t), tests)))
-        new_tests.extend(list(map(lambda t: tuple(t), tests)))
-
-        return new_tests
-
     def _extend_union_test_tuples(self, tests):
         new_tests = list(map(lambda t: (list(t[0]), list(t[1])), tests))
         tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
@@ -773,7 +766,7 @@ class TestIterable(TestCase):
     def test_union_leftIsEmpty_returnsAllDistinctElementsOfRight(self):
         # Add a duplicate element
         tests_list = list(map(lambda t: t + t[:1], self.__test_lists))
-        tests = self._extend_union_tests(tests_list)
+        tests = self.__extend_tests(tests_list)
 
         for right in tests:
             with self.subTest(right=right):
@@ -785,7 +778,7 @@ class TestIterable(TestCase):
     def test_union_rightIsEmpty_returnsAllDistinctElementsOfLeft(self):
         # Add a duplicate element
         tests_list = list(map(lambda t: t + t[:1], self.__test_lists))
-        tests = self._extend_union_tests(tests_list)
+        tests = self.__extend_tests(tests_list)
 
         for left in tests:
             with self.subTest(left=left):
