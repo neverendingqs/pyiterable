@@ -44,6 +44,16 @@ class TestIterableTestClazz:
 
 class TestIterable(TestCase):
 
+    @staticmethod
+    def __extend_test(iterable):
+        tests = [
+            list(iterable),
+            set(iterable),
+            tuple(iterable)
+        ]
+
+        return tests
+
     def setUp(self):
         self.__bool_list = [True, False, False, True, False, False]
         self.__int_list = [1, 2, 2, 5, 0, -8]
@@ -127,14 +137,10 @@ class TestIterable(TestCase):
                 )
 
     def test_all_hasFalse_returnsFalse(self):
-        test_list = [True, False, True, True]
+        test = [True, False, True, True]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     all(test_input),
@@ -142,14 +148,10 @@ class TestIterable(TestCase):
                 )
 
     def test_all_onlyHasTrue_returnsTrue(self):
-        test_list = [True for i in range(7)]
+        test = [True for i in range(7)]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     all(test_input),
@@ -157,14 +159,10 @@ class TestIterable(TestCase):
                 )
 
     def test_any_hasTrue_returnsTrue(self):
-        test_list = [True, False, True, True]
+        test = [True, False, True, True]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     any(test_input),
@@ -172,14 +170,10 @@ class TestIterable(TestCase):
                 )
 
     def test_any_onlyHasFalse_returnsFalse(self):
-        test_list = [False for i in range(7)]
+        test = [False for i in range(7)]
+        test_inputs = self.__extend_test(test)
 
-        test_input = [
-            test_list,
-            set(test_list)
-        ]
-
-        for test_input in test_input:
+        for test_input in test_inputs:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     any(test_input),
@@ -261,7 +255,7 @@ class TestIterable(TestCase):
     def test_max_emptyIterableWithDefault_returnsDefault(self):
         default = 7
 
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
@@ -270,7 +264,7 @@ class TestIterable(TestCase):
 
     @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
     def test_max_emptyIterableAndDefaultIsNone_returnsNone(self):
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -318,7 +312,7 @@ class TestIterable(TestCase):
     def test_min_emptyIterableWithDefault_returnsDefault(self):
         default = -6
 
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
@@ -327,7 +321,7 @@ class TestIterable(TestCase):
 
     @skipIf(sys.version_info < (3, 4), "'default' keyword-only argument is new in 3.4")
     def test_min_emptyIterableAndDefaultIsNone_returnsNone(self):
-        for test_input in [[], set()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -524,7 +518,7 @@ class TestIterable(TestCase):
                 )
 
     def test_first_emptyIterableWithNoDefault_returnsNone(self):
-        for test_input in [[], set(), tuple()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
@@ -533,7 +527,7 @@ class TestIterable(TestCase):
 
     def test_first_emptyIterableWithDefault_returnsDefault(self):
         default = "default"
-        for test_input in [[], set(), tuple()]:
+        for test_input in self.__extend_test([]):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
