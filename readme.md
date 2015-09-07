@@ -25,5 +25,7 @@ Get it via `pip install pyiterable`!
 ## Links
 
 * API docs: [http://pyiterable.readthedocs.org/en/latest/](http://pyiterable.readthedocs.org/en/latest/)
+* Travis CI: [https://travis-ci.org/neverendingqs/pyiterable](https://travis-ci.org/neverendingqs/pyiterable)
+* Coveralls: [https://coveralls.io/github/neverendingqs/pyiterable](https://coveralls.io/github/neverendingqs/pyiterable)
 * Source: [https://github.com/neverendingqs/pyiterable](https://github.com/neverendingqs/pyiterable)
 * Package: [https://pypi.python.org/pypi/pyiterable/](https://pypi.python.org/pypi/pyiterable/)
