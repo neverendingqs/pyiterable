@@ -287,16 +287,30 @@ class Iterable:
         """
         return Iterable(set(self.__iterable))
 
+    def intersection(self, iterable):
+        """
+        Equivalent to calling **set(** *left* **).intersection( set(** *right* **) )**
+
+        >>> left = [2, 10, 1982, -5, 9, 10]
+        >>> right = [1982, -10, -5, 1982, 98]
+        >>> Iterable(left).intersection(right).to_list()
+        [-5, 1982]
+
+        :param iterable: iterable to intersect with *Iterable*
+        :return: *Iterable* with distinct values found in both *self* and *iterable*
+        """
+        return Iterable(set(self.__iterable).intersection(set(iterable)))
+
     def union(self, iterable):
         """
         Equivalent to calling **set(** *left* **).union( set(** *right* **) )**
 
         >>> left = [2, 10, 2, 2, 5, 9, 10]
         >>> right = [13, -5, 1982, -10, 2384, 1982, 98]
-        >>> list(Iterable(left).union(right))
+        >>> Iterable(left).union(right).to_list()
         [2, 98, 5, 9, 10, 13, 2384, -10, -5, 1982]
 
         :param iterable: iterable to union with *Iterable*
-        :return: *Iterable* with distinct values in both *self* and *iterable*
+        :return: *Iterable* with distinct values in either *self* or *iterable*
         """
         return Iterable(set(self.__iterable).union(set(iterable)))
