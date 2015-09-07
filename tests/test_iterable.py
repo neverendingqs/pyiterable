@@ -55,7 +55,8 @@ class TestIterable(TestCase):
         new_tests = [
             list(test),
             set(test),
-            tuple(test)
+            tuple(test),
+            Iterable(test)
         ]
 
         return new_tests
@@ -85,6 +86,7 @@ class TestIterable(TestCase):
         new_tests = list(map(lambda t: (list(t[0]), list(t[1])), tests))
         tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
         tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        tests.extend(list(map(lambda t: (Iterable(t[0]), Iterable(t[1])), tests)))
 
         return new_tests
 
@@ -760,23 +762,6 @@ class TestIterable(TestCase):
                 self.assertEqual(
                     Counter(expected_output),
                     Counter(Iterable(left).union(right).to_list())
-                )
-
-    def test_union_twoIterables_returnsProperUnion(self):
-        # Remove an element from both left and right
-        tests_list = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_inputs]
-        tests = self._extend_test_tuples(tests_list)
-
-        for test_input in tests:
-            with self.subTest(test_input=test_input):
-                left = test_input[0]
-                right = test_input[1]
-
-                expected_output = set(left).union(set(right))
-
-                self.assertEqual(
-                    Counter(expected_output),
-                    Counter(Iterable(left).union(Iterable(right)).to_list())
                 )
 
     def test_union_leftIsEmpty_returnsAllDistinctElementsOfRight(self):
