@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/neverendingqs/pyiterable/badge.svg?branch=master&service=github)](https://coveralls.io/github/neverendingqs/pyiterable?branch=master)
+
 # Pyiterable
 
 Python comes with some nice built-in methods for operating on iterables, but it can get messy really quickly if you want to transform an iterable multiple times. Write more expressive code by chaining built-in transformations with this module.
