@@ -255,4 +255,17 @@ class Iterable:
             return next(iter(self.__iterable), default)
 
     def mapmany(self, function):
+        """
+        Equivalent to calling **itertools.chaim.from_iterable( map(** *function, iterable* **) )**
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> func = lambda x: [x, x]
+        >>> values.map(func).to_list()
+        [[1, 1], [2, 2], [5, 5], [9, 9]]
+        >>> values.mapmany(func).to_list()
+        [1, 1, 2, 2, 5, 5, 9, 9]
+
+        :param function: function to be applied to each input, and outputs an iterable
+        :return: *Iterable* comprised of every element returned by **function**
+        """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
