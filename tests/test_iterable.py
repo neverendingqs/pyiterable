@@ -46,6 +46,13 @@ class TestIterable(TestCase):
 
     @staticmethod
     def __extend_test(test):
+        """
+        Extends test to different iterable types,
+        making it easier to add/remove iterable types we want to test for in this test suite.
+
+        :param test: an iterable representing the test input
+        :return: list of test inputs, each of the type we want to test for
+        """
         new_tests = [
             list(test),
             set(test),
@@ -55,6 +62,13 @@ class TestIterable(TestCase):
         return new_tests
 
     def __extend_tests(self, tests):
+        """
+        Extends tests to different iterable types,
+        making it easier to add/remove iterable types we want to test for in this test suite.
+
+        :param tests: an iterable containing multiple test inputs
+        :return: list of test inputs, represented by all iterable types we want to test for
+        """
         new_tests = []
         for test in tests:
             new_tests.extend(self.__extend_test(test))
@@ -62,6 +76,13 @@ class TestIterable(TestCase):
         return new_tests
 
     def _extend_test_tuples(self, tests):
+        """
+        Extends tests of type tuple(left_iterable, right_iterable),
+        making it easier to add/remove iterable types we want to test for in this test suite.
+
+        :param tests: an iterable of tuples of the form (left_iterable, right_iterable)
+        :return: list of test inputs of the form, represented by all iterable types we want to test for
+        """
         new_tests = list(map(lambda t: (list(t[0]), list(t[1])), tests))
         tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
         tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
