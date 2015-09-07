@@ -89,7 +89,7 @@ class TestIterable(TestCase):
                     Counter(list(test_input)),
                     Counter(actual)
                 )
-    
+
                 self.assertIs(
                     type([]),
                     type(actual)
@@ -500,3 +500,89 @@ class TestIterable(TestCase):
                     reduce(func, test_input, initializer),
                     Iterable(test_input).reduce(func, initializer)
                 )
+
+    def test_first_noArgs_returnsFirstElement(self):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                expected_first = list(test_input)[0]
+
+                self.assertEqual(
+                    expected_first,
+                    Iterable(test_input).first()
+                )
+
+    def test_first_withFunc_returnsFirstMatchingElement(self):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                expected_first = list(test_input)[-1]
+                func = lambda x: x == expected_first
+
+                self.assertEqual(
+                    expected_first,
+                    Iterable(test_input).first(function=func)
+                )
+
+    def test_first_emptyIterableWithNoDefault_returnsNone(self):
+        for test_input in [[], set(), tuple()]:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    None,
+                    Iterable(test_input).first()
+                )
+
+    def test_first_emptyIterableWithDefault_returnsDefault(self):
+        default = "default"
+        for test_input in [[], set(), tuple()]:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    default,
+                    Iterable(test_input).first(default=default)
+                )
+
+    def test_first_noneMatchingFuncWithNoDefault_returnsNone(self):
+        # create a func that should not match anything
+        func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    None,
+                    Iterable(test_input).first(function=func)
+                )
+
+    def test_first_noneMatchingFuncWithDefault_returnsNone(self):
+        # create a func that should not match anything
+        func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
+        default = "default"
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    default,
+                    Iterable(test_input).first(function=func, default=default)
+                )
+
+    def test_mapmany_eachElementMapsToList_returnsFlattenedIterable(self):
+        function = lambda x: [x, x]
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                expected_output = list(test_input) + list(test_input)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(test_input).mapmany(function).to_list())
+                )
+
+    def test_mapmany_eachElementMapsToTuple_returnsFlattenedIterable(self):
+        function = lambda x: (x, x)
+
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                expected_output = list(test_input) + list(test_input)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(test_input).mapmany(function).to_list())
+                )
+

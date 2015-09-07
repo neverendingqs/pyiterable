@@ -1,4 +1,5 @@
 from functools import reduce
+import itertools
 
 
 class Iterable:
@@ -11,7 +12,7 @@ class Iterable:
         return self.__iterable.__iter__()
 
     def __len__(self):
-        return len(self.__iterable)
+        return len(list(self.__iterable))
 
     # built-in equivalent data structures
     def to_list(self):
@@ -231,3 +232,40 @@ class Iterable:
             return reduce(function, self.__iterable)
         else:
             return reduce(function, self.__iterable, initializer)
+
+    # custom transformations
+    def first(self, function=None, default=None):
+        """ Equivalent to calling **next( iter( filter(** *function, iterable* **)** *, default* **)**
+
+        :param function: keyword-only; function used to filter unwanted values
+        :param default: keyword-only value to return if *Iterable* is empty after filtered by *func*
+        :return: first value of *Iterable* filtered by *func*
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.first()
+        1
+        >>> values.first(function=lambda x: x > 5)
+        9
+        >>> values.first(function=lambda x: x > 10, default=0)
+        0
+        """
+        if function:
+            return next(iter(filter(function, self.__iterable)), default)
+        else:
+            return next(iter(self.__iterable), default)
+
+    def mapmany(self, function):
+        """
+        Equivalent to calling **itertools.chaim.from_iterable( map(** *function, iterable* **) )**
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> func = lambda x: [x, x]
+        >>> values.map(func).to_list()
+        [[1, 1], [2, 2], [5, 5], [9, 9]]
+        >>> values.mapmany(func).to_list()
+        [1, 1, 2, 2, 5, 5, 9, 9]
+
+        :param function: function to be applied to each input, and outputs an iterable
+        :return: *Iterable* comprised of every element returned by **function**
+        """
+        return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))

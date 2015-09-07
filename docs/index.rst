@@ -64,6 +64,11 @@ do this:
 Release
 -------
 
+0.2.0
+
+* Added ``first()``, which gives you the first value in ``Iterable``, with an optional default if no values exist
+* Added ``mapmany()``, which functions like map, except it expects more than one output for each item of ``Iterable``
+
 0.1.0
 
 * First release!
