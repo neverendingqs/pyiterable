@@ -612,10 +612,10 @@ class TestIterable(TestCase):
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
-                left = set(test_input[0])
-                right = set(test_input[1])
+                left = test_input[0]
+                right = test_input[1]
 
-                expected_output = list(left)
+                expected_output = set(left)
 
                 self.assertEqual(
                     Counter(expected_output),
@@ -624,14 +624,18 @@ class TestIterable(TestCase):
 
     def test_union_leftIsSupersetOfRight_returnsLeft(self):
         # Remove an element from right
-        tests = [(left, list(deepcopy(left))[:-1]) for left in self.__test_input]
+        tests = [(left, left[:-1]) for left in self.__test_lists]
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
-                left = set(test_input[0])
-                right = set(test_input[1])
+                left = test_input[0]
+                right = test_input[1]
 
-                expected_output = list(left)
+                expected_output = set(left)
 
                 self.assertEqual(
                     Counter(expected_output),
@@ -640,14 +644,18 @@ class TestIterable(TestCase):
 
     def test_union_leftIsSubsetOfRight_returnsRight(self):
         # Remove an element from right
-        tests = [(list(deepcopy(right))[1:], right) for right in self.__test_input]
+        tests = [(list(deepcopy(right))[1:], right) for right in self.__test_lists]
 
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+        
         for test_input in tests:
             with self.subTest(test_input=test_input):
-                left = set(test_input[0])
-                right = set(test_input[1])
+                left = test_input[0]
+                right = test_input[1]
 
-                expected_output = list(right)
+                expected_output = set(right)
 
                 self.assertEqual(
                     Counter(expected_output),
@@ -656,14 +664,18 @@ class TestIterable(TestCase):
 
     def test_union_leftAndRightHasSomeIntersectingValues_returnsUnionOfLeftAndRight(self):
         # Remove an element from both left and right
-        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_input]
+        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
-                left = set(test_input[0])
-                right = set(test_input[1])
+                left = test_input[0]
+                right = test_input[1]
 
-                expected_output = list(left.union(right))
+                expected_output = set(left).union(set(right))
 
                 self.assertEqual(
                     Counter(expected_output),
@@ -680,10 +692,14 @@ class TestIterable(TestCase):
             ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
         ]
 
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+
         for test_input in tests:
             with self.subTest(test_input=test_input):
-                left = set(test_input[0])
-                right = set(test_input[1])
+                left = test_input[0]
+                right = test_input[1]
 
                 expected_output = list(left) + list(right)
 
@@ -693,15 +709,19 @@ class TestIterable(TestCase):
                 )
 
     def test_union_twoIterables_returnsProperUnion(self):
-         # Remove an element from both left and right
+        # Remove an element from both left and right
         tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_input]
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
 
         for test_input in tests:
             with self.subTest(test_input=test_input):
-                left = set(test_input[0])
-                right = set(test_input[1])
+                left = test_input[0]
+                right = test_input[1]
 
-                expected_output = list(left.union(right))
+                expected_output = set(left).union(set(right))
 
                 self.assertEqual(
                     Counter(expected_output),
