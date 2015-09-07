@@ -587,6 +587,76 @@ class TestIterable(TestCase):
                     Counter(Iterable(test_input).mapmany(function).to_list())
                 )
 
+    def test_concat_leftAndRightHasSameContents_returnsLeftConcatRight(self):
+        for test_input in self.__test_input:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    Counter(list(test_input) + list(test_input)),
+                    Counter(Iterable(test_input).concat(test_input).to_list())
+                )
+
+    def test_concat_leftAndRightHaveNoIntersectingValues_returnsLeftConcatRight(self):
+        tests = [
+            ([True], [False]),
+            ([13, -5, 1982], [-10, 2384, 98]),
+            ([6.837, -374.6, -2.73], [3.210, 2.038, -3927.23]),
+            ("ab", "cd"),
+            (["querty", "dvorak", "abcde"], ["orange", "black", "blue"]),
+            ([TestIterableTestClazz(i) for i in range(0, 5)], [TestIterableTestClazz(i) for i in range(5, 9)])
+        ]
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                expected_output = list(left) + list(right)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).concat(right).to_list())
+                )
+
+    def test_concat_leftAndRightHasSomeIntersectingValues_returnsLeftConcatRight(self):
+        # Remove an element from both left and right
+        tests = [(list(deepcopy(t))[1:], list(deepcopy(t))[:-1]) for t in self.__test_lists]
+
+        # Add test inputs with different iterable types
+        tests.extend(list(map(lambda t: (set(t[0]), set(t[1])), tests)))
+        tests.extend(list(map(lambda t: (tuple(t[0]), tuple(t[1])), tests)))
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                left = test_input[0]
+                right = test_input[1]
+
+                expected_output = list(left) + list(right)
+
+                self.assertEqual(
+                    Counter(expected_output),
+                    Counter(Iterable(left).concat(right).to_list())
+                )
+
+    def test_concat_leftIsEmpty_returnsRight(self):
+        for right in self.__test_input:
+            with self.subTest(right=right):
+                self.assertEqual(
+                    Counter(list(right)),
+                    Counter(Iterable([]).concat(right).to_list())
+                )
+
+    def test_concat_rightIsEmpty_returnsLeft(self):
+        for left in self.__test_input:
+            with self.subTest(left=left):
+                self.assertEqual(
+                    Counter(list(left)),
+                    Counter(Iterable(left).concat([]).to_list())
+                )
+
     def test_distinct_returnsDistinctIterable(self):
         tests = [
             [True, False, False, True, True],

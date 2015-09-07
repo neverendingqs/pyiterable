@@ -270,6 +270,10 @@ class Iterable:
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
 
+    # List-like transformations
+    def concat(self, iterable):
+        return Iterable(list(self.__iterable) + list(iterable))
+
     # Set-like transformations
     def distinct(self):
         """
