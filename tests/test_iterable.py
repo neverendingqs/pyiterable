@@ -586,3 +586,19 @@ class TestIterable(TestCase):
                     Counter(Iterable(test_input).mapmany(function).to_list())
                 )
 
+    def test_distinct_returnsDistinctIterable(self):
+        tests = [
+            [True, False, False, True, True],
+            [3, 2, 2, -5, 7],
+            [3.42, 828.3, -6.4, -6.4, 5.99],
+            "aabaaydddk;eadddd",
+            ["orange", "black", "blue", "black", "white"],
+            [TestIterableTestClazz(5), TestIterableTestClazz("cloud"), TestIterableTestClazz("cloud")]
+        ]
+
+        for test_input in tests:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    list(set(test_input)),
+                    Iterable(test_input).distinct().to_list()
+                )
