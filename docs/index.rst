@@ -69,6 +69,13 @@ do this:
 Release
 -------
 
+0.3.0
+
+* Added set-like functionality, including ``difference()``, ``intersection()``,  ``symmetric_difference()``, and ``union()``.
+* Added ``concat()`` as an alternative to ``union()``
+* Added ``distinct()``
+* Added frozenset support (``to_frozenset()``)
+
 0.2.0
 
 * Added ``first()``, which gives you the first value in ``Iterable``, with an optional default if no values exist
