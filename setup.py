@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pyiterable',
-    version='0.2.0',
+    version='0.3.0',
     description='Iterable chains',
     long_description='Write more expressive code by chaining built-in transformations together.',
     classifiers=[
