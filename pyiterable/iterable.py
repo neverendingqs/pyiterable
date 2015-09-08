@@ -102,7 +102,7 @@ class Iterable:
         >>> grades.enumerate().to_list()
         [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd'), (5, 'f')]
         >>> grades.enumerate(start=5).to_list()
-        [(5, 'a'), (6, 'b'), (7, 'c'), (8, 'd'), (5, 'f')]
+        [(5, 'a'), (6, 'b'), (7, 'c'), (8, 'd'), (9, 'f')]
         """
         return Iterable(enumerate(self.__iterable, start))
 
@@ -269,9 +269,9 @@ class Iterable:
             return next(iter(self.__iterable), default)
 
     def mapmany(self, function):
-        """ Equivalent to calling **itertools.chaim.from_iterable( map(** *function, iterable* **) )**
+        """ Equivalent to calling **itertools.chain.from_iterable( map(** *function, iterable* **) )**
 
-        :param function: function to be applied to each input, and outputs an iterable
+        :param function: function to be applied to each input; outputs an iterable
         :return: *Iterable* comprised of every element returned by **function**
 
         >>> values = Iterable([1, 2, 5, 9])
@@ -301,7 +301,7 @@ class Iterable:
     def difference(self, iterable):
         """ Equivalent to calling **set(** *left* **).difference( set (** *iterable* **) )**
 
-        :param iterable: iterable to check for difference
+        :param iterable: iterable to check against for differences
         :return: New *Iterable* containing elements found in *self* but not *iterable*
 
         >>> left = [2, 10, 1982, -5, 9, 10]
@@ -355,8 +355,8 @@ class Iterable:
         :return: *Iterable* with distinct values in either *self* or *iterable*
 
         >>> left = [2, 10, 2, 2, 5, 9, 10]
-        >>> right = [13, -5, 1982, -10, 2384, 1982, 98]
+        >>> right = [1982, -10, 5, 1982, 9]
         >>> Iterable(left).union(right).to_list()
-        [2, 98, 5, 9, 10, 13, 2384, -10, -5, 1982]
+        [2, 5, 9, 10, -10, 1982]
         """
         return Iterable(set(self.__iterable).union(set(iterable)))
