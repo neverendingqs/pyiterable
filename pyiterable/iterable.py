@@ -71,7 +71,7 @@ class Iterable:
     def all(self):
         """ Equivalent to the built-in function **all(** *iterable* **)**
 
-        :return: True if all elements in *Iterable* are True, else False
+        :return: True if all elements in *self* are True, else False
 
         >>> Iterable([True, False, True]).all()
         False
@@ -83,7 +83,7 @@ class Iterable:
     def any(self):
         """ Equivalent to the built-in function **any(** *iterable* **)**
 
-        :return: True if any element in *Iterable* is True, else False
+        :return: True if any element in *self* is True, else False
 
         >>> Iterable([True, False, True]).any()
         True
@@ -121,7 +121,7 @@ class Iterable:
     def len(self):
         """ Equivalent to the built-in function **len(** *s* **)**
 
-        :return: number of items in *Iterable*
+        :return: number of items in *self*
 
         >>> grades = Iterable(['a', 'b', 'c', 'd', 'f'])
         >>> grades.len()
@@ -132,7 +132,7 @@ class Iterable:
     def map(self, function):
         """ Equivalent to the built-in function **map(** *function, iterable* **)**
 
-        :param function: function applied to every item in *Iterable*
+        :param function: function applied to every item in *self*
         :return: *Iterable* of results
 
         >>> numbers = Iterable([1, 3, 10, 4, 8])
@@ -145,8 +145,8 @@ class Iterable:
         """ Equivalent to the built-in function **max(** *iterable, \*[, key, default]* **)**
 
         :param key: keyword-only; function that returns the value to compare
-        :param default: keyword-only; value to return if *Iterable* is empty. Only available in Python 3.4 or later
-        :return: largest item in *Iterable*
+        :param default: keyword-only; value to return if *self* is empty. Only available in Python 3.4 or later
+        :return: largest item in *self*
 
         >>> grades = Iterable([('Charlie', 79), ('Alice', 94), ('Bob', 65)])
         >>> grades.max(key=lambda x: x[1])
@@ -158,8 +158,8 @@ class Iterable:
         """ Equivalent to the built-in function **min(** *iterable, \*[, key, default]* **)**
 
         :param key: keyword-only; function that returns the value to compare
-        :param default: keyword-only; value to return if *Iterable* is empty. Only available in Python 3.4 or later
-        :return: smallest item in *Iterable*
+        :param default: keyword-only; value to return if *self* is empty. Only available in Python 3.4 or later
+        :return: smallest item in *self*
 
         >>> grades = Iterable([('Charlie', 79), ('Alice', 94), ('Bob', 65)])
         >>> grades.min(key=lambda x: x[1])
@@ -170,7 +170,7 @@ class Iterable:
     def reversed(self):
         """ Equivalent to the built-in function **reversed(** *seq* **)**
 
-        :return: *Iterable* in the reversed order
+        :return: *self* in the reversed order
 
         >>> names = Iterable(['Bob', 'Alice', 'Daniel', 'Charlie'])
         >>> names.reversed().to_list()
@@ -183,7 +183,7 @@ class Iterable:
 
         :param cmp: keyword-only; custom comparison function. Only available in Python 2.x
         :param key: keyword-only; function that returns the value to compare
-        :param reverse: keyword-only; boolean; if True, *Iterable* is sorted with the largest value fist
+        :param reverse: keyword-only; boolean; if True, *self* is sorted with the largest value first
         :return: a sorted *Iterable*
 
         >>> grades = Iterable([('Charlie', 79), ('Alice', 94), ('Bob', 65)])
@@ -214,7 +214,7 @@ class Iterable:
         """ Equivalent to the built-in function **zip(** *[iterable, ...]* **)**
 
         :param args: any number of iterable objects
-        :return: list of tuples; i-th tuple contains all elements from each i-th element in *Iterable* and *\*args*
+        :return: list of tuples; i-th tuple contains all elements from each i-th element in *self* and *\*args*
 
         >>> left = Iterable(['Alice', 'Bob', 'Charlie', 'Daniel'])
         >>> left.zip([94, 65, 79, 70]).to_list()
@@ -232,7 +232,7 @@ class Iterable:
         Repeatedly applies *function* to sequence until one value is left
 
         :param function: function that takes two values and returns a single value
-        :param initializer: initial value combined with the first value in *Iterable*
+        :param initializer: initial value combined with the first value in *self*
         :return: single value
 
         >>> values = Iterable([1, 2, 5, 9])
@@ -251,14 +251,15 @@ class Iterable:
         """ Equivalent to calling **next( iter( filter(** *function, iterable* **)** *, default* **)**
 
         :param function: keyword-only; function used to filter unwanted values
-        :param default: keyword-only value to return if *Iterable* is empty after filtered by *func*
-        :return: first value of *Iterable* filtered by *func*
+        :param default: keyword-only value to return if *self* is empty after filtered by *func*
+        :return: first value of *self* filtered by *func*
 
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.first()
         1
         >>> values.first(function=lambda x: x > 5)
         9
+        >>> values.first(function=lambda x: x > 10) # Returns None
         >>> values.first(function=lambda x: x > 10, default=0)
         0
         """
@@ -286,7 +287,7 @@ class Iterable:
     def concat(self, iterable):
         """ Equivalent to calling **list(** *left* **) + list(** *right* **)**
 
-        :param iterable: iterable to concat with *Iterable*
+        :param iterable: iterable to concat with *self*
         :return: New *Iterable* containing the elements from *self* and *iterable*
 
         >>> left = [2, 10, 2, 2, 5, 9, 10]
@@ -324,7 +325,7 @@ class Iterable:
     def intersection(self, iterable):
         """ Equivalent to calling **set(** *left* **).intersection( set(** *right* **) )**
 
-        :param iterable: iterable to intersect with *Iterable*
+        :param iterable: iterable to intersect with *self*
         :return: *Iterable* with distinct values found in both *self* and *iterable*
 
         >>> left = [2, 10, 1982, -5, 9, 10]
@@ -350,7 +351,7 @@ class Iterable:
     def union(self, iterable):
         """ Equivalent to calling **set(** *left* **).union( set(** *right* **) )**
 
-        :param iterable: iterable to union with *Iterable*
+        :param iterable: iterable to union with *self*
         :return: *Iterable* with distinct values in either *self* or *iterable*
 
         >>> left = [2, 10, 2, 2, 5, 9, 10]
