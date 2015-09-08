@@ -15,6 +15,19 @@ class Iterable:
         return len(list(self.__iterable))
 
     # built-in equivalent data structures
+    def to_frozenset(self):
+        """ Equivalent to the built-in type **frozenset(** *iterable* **)**
+
+        :return: frozenset
+
+        >>> numbers = Iterable([10, 7, 28, 7, 19, 19, 70])
+        >>> numbers
+        <pyiterable.iterable.Iterable object at 0x017BA610>
+        >>> numbers.to_frozenset()
+        frozenset({10, 19, 28, 70, 7})
+        """
+        return frozenset(self.__iterable)
+
     def to_list(self):
         """ Equivalent to the built-in function **list(** *iterable* **)**
 

@@ -120,6 +120,21 @@ class TestIterable(TestCase):
                 with self.assertRaises(TypeError):
                     Iterable(test_input)
 
+    def test_to_frozenset(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                actual = Iterable(test_input).to_frozenset()
+
+                self.assertEqual(
+                    Counter(frozenset(test_input)),
+                    Counter(actual)
+                )
+
+                self.assertIs(
+                    type(frozenset()),
+                    type(actual)
+                )
+
     def test_to_list(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
