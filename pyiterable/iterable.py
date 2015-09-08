@@ -71,24 +71,24 @@ class Iterable:
     def all(self):
         """ Equivalent to the built-in function **all(** *iterable* **)**
 
-            :return: True if all elements in *Iterable* are True, else False
+        :return: True if all elements in *Iterable* are True, else False
 
-            >>> Iterable([True, False, True]).all()
-            False
-            >>> Iterable([True, True, True, True]).all()
-            True
+        >>> Iterable([True, False, True]).all()
+        False
+        >>> Iterable([True, True, True, True]).all()
+        True
         """
         return all(self.__iterable)
 
     def any(self):
         """ Equivalent to the built-in function **any(** *iterable* **)**
 
-            :return: True if any element in *Iterable* is True, else False
+        :return: True if any element in *Iterable* is True, else False
 
-            >>> Iterable([True, False, True]).any()
-            True
-            >>> Iterable([False, False, False, False]).any()
-            False
+        >>> Iterable([True, False, True]).any()
+        True
+        >>> Iterable([False, False, False, False]).any()
+        False
         """
         return any(self.__iterable)
 
@@ -268,8 +268,10 @@ class Iterable:
             return next(iter(self.__iterable), default)
 
     def mapmany(self, function):
-        """
-        Equivalent to calling **itertools.chaim.from_iterable( map(** *function, iterable* **) )**
+        """ Equivalent to calling **itertools.chaim.from_iterable( map(** *function, iterable* **) )**
+
+        :param function: function to be applied to each input, and outputs an iterable
+        :return: *Iterable* comprised of every element returned by **function**
 
         >>> values = Iterable([1, 2, 5, 9])
         >>> func = lambda x: [x, x]
@@ -277,92 +279,83 @@ class Iterable:
         [[1, 1], [2, 2], [5, 5], [9, 9]]
         >>> values.mapmany(func).to_list()
         [1, 1, 2, 2, 5, 5, 9, 9]
-
-        :param function: function to be applied to each input, and outputs an iterable
-        :return: *Iterable* comprised of every element returned by **function**
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
 
     # List-like transformations
     def concat(self, iterable):
-        """
-        Equivalent to calling **list(** *left* **) + list(** *right* **)**
+        """ Equivalent to calling **list(** *left* **) + list(** *right* **)**
+
+        :param iterable: iterable to concat with *Iterable*
+        :return: New *Iterable* containing the elements from *self* and *iterable*
 
         >>> left = [2, 10, 2, 2, 5, 9, 10]
         >>> right = [13, -5, 1982, -10, 2384, 1982, 98]
         >>> Iterable(left).concat(right).to_list()
         [2, 10, 2, 2, 5, 9, 10, 13, -5, 1982, -10, 2384, 1982, 98]
-
-        :param iterable: iterable to concat with *Iterable*
-        :return: New *Iterable* containing the elements from *self* and *iterable*
         """
         return Iterable(list(self.__iterable) + list(iterable))
 
     # Set-like transformations
     def difference(self, iterable):
-        """
-        Equivalent to calling **set(** *left* **).difference( set (** *iterable* **) )**
+        """ Equivalent to calling **set(** *left* **).difference( set (** *iterable* **) )**
+
+        :param iterable: iterable to check for difference
+        :return: New *Iterable* containing elements found in *self* but not *iterable*
 
         >>> left = [2, 10, 1982, -5, 9, 10]
         >>> right = [1982, -10, -5, 1982, 98]
         >>> Iterable(left).difference(right).to_list()
         [9, 2, 10]
-
-        :param iterable: iterable to check for difference
-        :return: New *Iterable* containing elements found in *self* but not *iterable*
         """
         return Iterable(set(self.__iterable).difference(set(iterable)))
 
     def distinct(self):
-        """
-        Equivalent to calling **set(** *iterable* **)**
+        """ Equivalent to calling **set(** *iterable* **)**
+
+        :return: New *Iterable* containing only the distinct elements; order not preserved
 
         >>> values = Iterable([2, 10, 2, 2, 5, 9, 10])
         >>> values.distinct().to_list()
         [9, 2, 10, 5]
-
-        :return: New *Iterable* containing only the distinct elements; order not preserved
         """
         return Iterable(set(self.__iterable))
 
     def intersection(self, iterable):
-        """
-        Equivalent to calling **set(** *left* **).intersection( set(** *right* **) )**
+        """ Equivalent to calling **set(** *left* **).intersection( set(** *right* **) )**
+
+        :param iterable: iterable to intersect with *Iterable*
+        :return: *Iterable* with distinct values found in both *self* and *iterable*
 
         >>> left = [2, 10, 1982, -5, 9, 10]
         >>> right = [1982, -10, -5, 1982, 98]
         >>> Iterable(left).intersection(right).to_list()
         [-5, 1982]
-
-        :param iterable: iterable to intersect with *Iterable*
-        :return: *Iterable* with distinct values found in both *self* and *iterable*
         """
         return Iterable(set(self.__iterable).intersection(set(iterable)))
 
     def symmetric_difference(self, iterable):
-        """
-        Equivalent to calling **set(** *left* **).symmetric_difference( set(** *right* **) )**
+        """ Equivalent to calling **set(** *left* **).symmetric_difference( set(** *right* **) )**
+
+        :param iterable: iterable to perform symmetric difference against
+        :return: *Iterable* with distinct values found in either *self* or *iterable* but not both
 
         >>> left = [2, 10, 1982, -5, 9, 10]
         >>> right = [1982, -10, -5, 1982, 98]
         >>> Iterable(left).symmetric_difference(right).to_list()
         [98, 2, 9, 10, -10]
-
-        :param iterable: iterable to perform symmetric difference against
-        :return: *Iterable* with distinct values found in either *self* or *iterable* but not both
         """
         return Iterable(set(self.__iterable).symmetric_difference(set(iterable)))
 
     def union(self, iterable):
-        """
-        Equivalent to calling **set(** *left* **).union( set(** *right* **) )**
+        """ Equivalent to calling **set(** *left* **).union( set(** *right* **) )**
+
+        :param iterable: iterable to union with *Iterable*
+        :return: *Iterable* with distinct values in either *self* or *iterable*
 
         >>> left = [2, 10, 2, 2, 5, 9, 10]
         >>> right = [13, -5, 1982, -10, 2384, 1982, 98]
         >>> Iterable(left).union(right).to_list()
         [2, 98, 5, 9, 10, 13, 2384, -10, -5, 1982]
-
-        :param iterable: iterable to union with *Iterable*
-        :return: *Iterable* with distinct values in either *self* or *iterable*
         """
         return Iterable(set(self.__iterable).union(set(iterable)))
