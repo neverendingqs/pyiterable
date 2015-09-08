@@ -326,6 +326,20 @@ class Iterable:
         """
         return Iterable(set(self.__iterable).intersection(set(iterable)))
 
+    def symmetric_difference(self, iterable):
+        """
+        Equivalent to calling **set(** *left* **).symmetric_difference( set(** *right* **) )**
+
+        >>> left = [2, 10, 1982, -5, 9, 10]
+        >>> right = [1982, -10, -5, 1982, 98]
+        >>> Iterable(left).symmetric_difference(right).to_list()
+        [98, 2, 9, 10, -10]
+
+        :param iterable: iterable to perform symmetric difference against
+        :return: *Iterable* with distinct values found in either *self* or *iterable* but not both
+        """
+        return Iterable(set(self.__iterable).symmetric_difference(set(iterable)))
+
     def union(self, iterable):
         """
         Equivalent to calling **set(** *left* **).union( set(** *right* **) )**
