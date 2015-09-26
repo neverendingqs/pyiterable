@@ -57,5 +57,4 @@ target/
 *.zip
 
 # PyCharm
-.idea/workspace.xml
-.idea/tasks.xml
+.idea
