@@ -69,6 +69,11 @@ do this:
 Release
 -------
 
+0.3.1
+
+* Added support for Python 3.5
+* Removed support for Python 3.2
+
 0.3.0
 
 * Added set-like functionality, including ``difference()``, ``intersection()``,  ``symmetric_difference()``, and ``union()``.
