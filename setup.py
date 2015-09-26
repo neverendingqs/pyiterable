@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pyiterable',
-    version='0.3.0',
+    version='0.3.1',
     description='Iterable chains',
     long_description='Write more expressive code by chaining built-in transformations together.',
     classifiers=[
@@ -10,6 +10,7 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5'
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     url='https://github.com/neverendingqs/pyiterable',
