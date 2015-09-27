@@ -304,11 +304,11 @@ class Iterable:
         return Iterable(list(self.__iterable) + list(iterable))
 
     def first(self, function=None, default=None):
-        """ Equivalent to calling **next( iter( filter(** *function, iterable* **)** *, default* **)**
+        """ Equivalent to calling **next( iter( filter(** *function, iterable* **) )** *, default* **)**
 
         :param function: keyword-only; function used to filter unwanted values
-        :param default: keyword-only value to return if *self* is empty after filtered by *func*
-        :return: first value of *self* filtered by *func*
+        :param default: keyword-only value to return if *self* is empty after filtered by *function*
+        :return: first value of *self* filtered by *function*
 
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.first()
@@ -325,6 +325,21 @@ class Iterable:
             return next(iter(self.__iterable), default)
 
     def last(self, function=None, default=None):
+        """ Equivalent to calling **next( iter( reversed( list( filter(** *function, iterable* **) ) ) )** *, default* **)**
+
+        :param function: keyword-only; function used to filter unwanted values
+        :param default: keyword-only value to return if *self* is empty after filtered by *function*
+        :return: last value of *self* filtered by *function*
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.last()
+        9
+        >>> values.last(function=lambda x: x < 5)
+        2
+        >>> values.last(function=lambda x: x < 1) # Returns None
+        >>> values.last(function=lambda x: x < 1, default=0)
+        0
+        """
         if function:
             reversed_iterable = reversed(list(filter(function, self.__iterable)))
         else:
