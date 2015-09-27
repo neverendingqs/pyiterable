@@ -283,6 +283,18 @@ class Iterable:
 
         return value in self.__iterable
 
+    def is_empty(self):
+        """ Equivalent to calling **len( list(** *iterable* **) ) == 0**
+
+        :return: *True* if *iterable* does not contain any elements; otherwise *False*
+
+        >>> Iterable([1, 2, 5, 9]).is_empty()
+        False
+        >>> Iterable([]).is_empty()
+        True
+        """
+        return len(list(self.__iterable)) == 0
+
     def mapmany(self, function):
         """ Equivalent to calling **itertools.chain.from_iterable( map(** *function, iterable* **) )**
 

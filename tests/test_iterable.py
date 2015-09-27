@@ -620,6 +620,15 @@ class TestIterable(TestCase):
                     Counter(Iterable(test_input).mapmany(function).to_list())
                 )
 
+    def test_is_empty_isNotEmpty_returnsFalse(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertFalse(Iterable(test_input).is_empty())
+
+    def test_is_empty_isEmpty_returnsTrue(self):
+        for test_input in self.__extend_test([]):
+            self.assertTrue(Iterable(test_input).is_empty())
+
     def test_concat_leftAndRightHasSameContents_returnsLeftConcatRight(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
