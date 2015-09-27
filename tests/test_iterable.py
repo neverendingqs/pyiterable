@@ -693,6 +693,67 @@ class TestIterable(TestCase):
                     Iterable(test_input).first(function=func, default=default)
                 )
 
+    def test_last_noArgs_returnsLastElement(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                expected_last = list(test_input)[-1]
+
+                self.assertEqual(
+                    expected_last,
+                    Iterable(test_input).last()
+                )
+
+    def test_last_withFunc_returnsLastMatchingElement(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                expected_last = list(test_input)[-1]
+                func = lambda x: x == expected_last
+
+                self.assertEqual(
+                    expected_last,
+                    Iterable(test_input).last(function=func)
+                )
+
+    def test_last_emptyIterableWithNoDefault_returnsNone(self):
+        for test_input in self.__extend_test([]):
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    None,
+                    Iterable(test_input).last()
+                )
+
+    def test_last_emptyIterableWithDefault_returnsDefault(self):
+        default = "default"
+        for test_input in self.__extend_test([]):
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    default,
+                    Iterable(test_input).last(default=default)
+                )
+
+    def test_last_noneMatchingFuncWithNoDefault_returnsNone(self):
+        # create a func that should not match anything
+        func = lambda x: x == uuid.uuid4()
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    None,
+                    Iterable(test_input).last(function=func)
+                )
+
+    def test_last_noneMatchingFuncWithDefault_returnsNone(self):
+        # create a func that should not match anything
+        func = lambda x: x == uuid.uuid4()
+        default = "default"
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    default,
+                    Iterable(test_input).last(function=func, default=default)
+                )
+
     def test_difference_leftAndRightHasSameContents_returnsEmptyIterable(self):
         tests = [(left, deepcopy(left)) for left in self.__test_inputs]
 

@@ -324,6 +324,14 @@ class Iterable:
         else:
             return next(iter(self.__iterable), default)
 
+    def last(self, function=None, default=None):
+        if function:
+            reversed_iterable = reversed(list(filter(function, self.__iterable)))
+        else:
+            reversed_iterable = reversed(list(self.__iterable))
+
+        return next(iter(reversed_iterable), default)
+
     # Set-like transformations / functions
     def difference(self, iterable):
         """ Equivalent to calling **set(** *left* **).difference( set (** *iterable* **) )**
