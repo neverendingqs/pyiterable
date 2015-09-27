@@ -2,6 +2,7 @@ from collections import Counter
 from copy import deepcopy
 from functools import reduce
 from unittest2 import skipIf, TestCase
+import uuid
 import sys
 
 from pyiterable import Iterable
@@ -581,6 +582,19 @@ class TestIterable(TestCase):
                     default,
                     Iterable(test_input).first(function=func, default=default)
                 )
+
+    def test_contains_doesNotContainValue_returnsFalse(self):
+        value_not_in_test_input = uuid.uuid4()
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertFalse(Iterable(test_input).contains(value_not_in_test_input))
+
+    def test_contains_containsValue_returnsTrue(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                a_value_in_test_input = list(test_input)[-1]
+                self.assertTrue(Iterable(test_input).contains(a_value_in_test_input))
 
     def test_mapmany_eachElementMapsToList_returnsFlattenedIterable(self):
         function = lambda x: [x, x]

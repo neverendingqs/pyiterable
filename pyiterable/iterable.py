@@ -246,7 +246,7 @@ class Iterable:
         else:
             return reduce(function, self.__iterable, initializer)
 
-    # custom transformations
+    # custom transformations / functions
     def first(self, function=None, default=None):
         """ Equivalent to calling **next( iter( filter(** *function, iterable* **)** *, default* **)**
 
@@ -268,6 +268,21 @@ class Iterable:
         else:
             return next(iter(self.__iterable), default)
 
+    def contains(self, value):
+        """ Equivalent to calling **value in** *iterable*
+
+        :param value: value to search for inside *iterable*
+        :return: *True* if value exists inside *iterable*, otherwise false
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.contains(2)
+        True
+        >>> values.contains(4)
+        False
+        """
+
+        return value in self.__iterable
+
     def mapmany(self, function):
         """ Equivalent to calling **itertools.chain.from_iterable( map(** *function, iterable* **) )**
 
@@ -283,7 +298,7 @@ class Iterable:
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
 
-    # List-like transformations
+    # List-like transformations / functions
     def concat(self, iterable):
         """ Equivalent to calling **list(** *left* **) + list(** *right* **)**
 
@@ -297,7 +312,7 @@ class Iterable:
         """
         return Iterable(list(self.__iterable) + list(iterable))
 
-    # Set-like transformations
+    # Set-like transformations / functions
     def difference(self, iterable):
         """ Equivalent to calling **set(** *left* **).difference( set (** *iterable* **) )**
 
