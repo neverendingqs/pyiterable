@@ -783,6 +783,24 @@ class TestIterable(TestCase):
                     Iterable(test_input).get(index)
                 )
 
+    def test_get_indexIsZero_returnsFirstValue(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    list(test_input)[0],
+                    Iterable(test_input).get(0)
+                )
+
+    def test_get_indexIsLastElement_returnsLastValue(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                last_element = len(test_input) - 1
+
+                self.assertEqual(
+                    list(test_input)[last_element],
+                    Iterable(test_input).get(last_element)
+                )
+
     def test_get_indexLessThanZero_raisesIndexError(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):

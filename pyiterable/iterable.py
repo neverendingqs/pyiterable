@@ -363,6 +363,14 @@ class Iterable:
         :return: value at *index* from *iterable*
 
         :raises IndexError: *index* is less than 0 or is out of bounds
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.get(2)
+        5
+        >>> values.get(-1)
+        IndexError: index out of range
+        >>> values.get(5)
+        IndexError: index out of range
         """
         iterable_as_list = list(self.__iterable)
 
