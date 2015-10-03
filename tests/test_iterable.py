@@ -121,6 +121,17 @@ class TestIterable(TestCase):
                 with self.assertRaises(TypeError):
                     Iterable(test_input)
 
+    def test_constructor_doesShallowCopy(self):
+        for test_input in self.__test_lists:
+            with self.subTest(test_input=test_input):
+                iterable = Iterable(test_input)
+                test_input.append(uuid.uuid4())
+
+                self.assertNotEquals(
+                    Counter(test_input),
+                    Counter(iterable)
+                )
+
     def test_to_frozenset(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
@@ -944,8 +955,8 @@ class TestIterable(TestCase):
         for test_input in tests:
             with self.subTest(test_input=test_input):
                 self.assertEqual(
-                    list(set(test_input)),
-                    Iterable(test_input).distinct().to_list()
+                    Counter(list(set(test_input))),
+                    Counter(Iterable(test_input).distinct().to_list())
                 )
 
     def test_intersection_leftAndRightHasSameContents_returnsLeft(self):
