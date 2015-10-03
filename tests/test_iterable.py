@@ -885,7 +885,7 @@ class TestIterable(TestCase):
     def test_take_countIsSmallerThanLengthOfIterable_returnsSubsetOfIterable(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
-                prefix_length = len(test_input) - 1
+                prefix_length = int(len(test_input) / 2)
 
                 self.assertEqual(
                     list(test_input)[:prefix_length],
