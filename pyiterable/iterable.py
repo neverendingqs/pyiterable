@@ -296,7 +296,7 @@ class Iterable:
         :param default: keyword-only value to return if *self* is empty after filtered by *function*
         :return: value of *self* filtered by *function*
 
-        :raises ValueError: Iterable contains more than one element after filtered by *function*
+        :raises ValueError: *iterable* contains more than one element after being filtered by *function*
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.single()
         ValueError: The input iterable [1, 2, 5, 9] contains more than one element.
@@ -401,6 +401,34 @@ class Iterable:
             reversed_iterable = reversed(list(self.__iterable))
 
         return next(iter(reversed_iterable), default)
+
+    def take(self, count):
+        """ Gets the first *count* elements in *iterable*
+
+        * This function will convert the *iterable* to a sequence type before retrieving the values
+        * If *count* is equal to or greater than the length of *iterable*, all elements are taken
+
+        :param count: number of values to retrieve
+        :return: *Iterable* comprised of the first *count* elements
+
+        :raises ValueError: *count* is a negative value
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.take(2).to_list()
+        [5, 9]
+        >>> values.take(10).to_list()
+        [1, 2, 5, 9]
+        >>> values.take(-1).to_list()
+        ValueError: 'count' must be greater than 0
+        """
+        if count < 0:
+            raise ValueError("'count' must be greater than 0")
+        elif count == 0:
+            return Iterable([])
+        elif count >= len(self.__iterable):
+            return self
+        else:
+            return Iterable(list(self.__iterable)[count:])
 
     # Set-like transformations / functions
     def difference(self, iterable):

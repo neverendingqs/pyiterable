@@ -874,6 +874,50 @@ class TestIterable(TestCase):
                     Iterable(test_input).last(function=func, default=default)
                 )
 
+    def test_take_countIsZero_returnsEmptyIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    [],
+                    Iterable(test_input).take(0).to_list()
+                )
+
+    def test_take_countIsSmallerThanLengthOfIterable_returnsSubsetOfIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                prefix_length = len(test_input) - 1
+
+                self.assertEqual(
+                    list(test_input)[prefix_length:],
+                    Iterable(test_input).take(prefix_length).to_list()
+                )
+
+    def test_take_countIsExactlyLengthOfIterable_returnsIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                length = len(test_input)
+
+                self.assertEqual(
+                    list(test_input),
+                    Iterable(test_input).take(length).to_list()
+                )
+
+    def test_take_countIsGreaterThanLengthOfIterable_returnsIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                length = len(test_input) + 1
+
+                self.assertEqual(
+                    list(test_input),
+                    Iterable(test_input).take(length).to_list()
+                )
+
+    def test_take_countIsNegative_raisesValueError(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(ValueError):
+                    Iterable(test_input).take(-1)
+
     def test_difference_leftAndRightHasSameContents_returnsEmptyIterable(self):
         tests = [(left, deepcopy(left)) for left in self.__test_inputs]
 
