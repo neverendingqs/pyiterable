@@ -289,10 +289,10 @@ class Iterable:
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
 
-    def single(self, function=None, default=None):
+    def single(self, filter_by=None, default=None):
         """ Equivalent to calling **first()**, except it raises *ValueError* if *iterable* contains more than one element
 
-        :param function: keyword-only; function used to filter unwanted values
+        :param filter_by: keyword-only; function used to filter unwanted values
         :param default: keyword-only value to return if *self* is empty after filtered by *function*
         :return: value of *self* filtered by *function*
 
@@ -300,19 +300,19 @@ class Iterable:
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.single()
         ValueError: iterable [1, 2, 5, 9] contains more than one element
-        >>> values.single(function=lambda x: x > 1)
+        >>> values.single(filter_by=lambda x: x > 1)
         ValueError: iterable [2, 5, 9] contains more than one element
-        >>> values.single(function=lambda x: x > 5)
+        >>> values.single(filter_by=lambda x: x > 5)
         9
-        >>> values.single(function=lambda x: x > 10) # Returns None
-        >>> values.single(function=lambda x: x > 10, default=0)
+        >>> values.single(filter_by=lambda x: x > 10) # Returns None
+        >>> values.single(filter_by=lambda x: x > 10, default=0)
         0
 
         """
-        if function is None:
+        if filter_by is None:
             filtered_self = self
         else:
-            filtered_self = self.filter(function)
+            filtered_self = self.filter(filter_by)
 
         if filtered_self.len() > 1:
             raise ValueError("iterable {} contains more than one element".format(filtered_self.__iterable))
@@ -381,24 +381,24 @@ class Iterable:
 
         return list(self.__iterable)[index]
 
-    def last(self, function=None, default=None):
+    def last(self, filter_by=None, default=None):
         """ Equivalent to calling **next( iter( reversed( list( filter(** *function, iterable* **) ) ) )** *, default* **)**
 
-        :param function: keyword-only; function used to filter unwanted values
+        :param filter_by: keyword-only; function used to filter unwanted values
         :param default: keyword-only value to return if *self* is empty after filtered by *function*
         :return: last value of *self* filtered by *function*
 
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.last()
         9
-        >>> values.last(function=lambda x: x < 5)
+        >>> values.last(filter_by=lambda x: x < 5)
         2
-        >>> values.last(function=lambda x: x < 1) # Returns None
-        >>> values.last(function=lambda x: x < 1, default=0)
+        >>> values.last(filter_by=lambda x: x < 1) # Returns None
+        >>> values.last(filter_by=lambda x: x < 1, default=0)
         0
         """
-        if function:
-            reversed_iterable = reversed(list(filter(function, self.__iterable)))
+        if filter_by:
+            reversed_iterable = reversed(list(filter(filter_by, self.__iterable)))
         else:
             reversed_iterable = reversed(list(self.__iterable))
 
