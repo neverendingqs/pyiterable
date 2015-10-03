@@ -289,6 +289,35 @@ class Iterable:
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
 
+    def single(self, function=None, default=None):
+        """ Equivalent to calling **first()**, except it raises *ValueError* if *iterable* contains more than one element
+
+        :param function: keyword-only; function used to filter unwanted values
+        :param default: keyword-only value to return if *self* is empty after filtered by *function*
+        :return: value of *self* filtered by *function*
+
+        :raises ValueError: Iterable contains more than one element after filtered by *function*
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.single()
+        ValueError: The input iterable [1, 2, 5, 9] contains more than one element.
+        >>> values.single(function=lambda x: x > 5)
+        9
+        >>> values.single(function=lambda x: x > 10) # Returns None
+        >>> values.single(function=lambda x: x > 10, default=0)
+        0
+
+        """
+        if function is None:
+            filtered_self = self
+        else:
+            filtered_self = self.filter(function).to_list()
+
+        if len(filtered_self) > 1:
+            raise ValueError("The input iterable {} contains more than one element.".format(self.__iterable))
+
+        return Iterable(filtered_self).first(default=default)
+
+
     # List-like transformations / functions
     def concat(self, iterable):
         """ Equivalent to calling **list(** *left* **) + list(** *right* **)**

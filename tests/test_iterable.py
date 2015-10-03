@@ -568,6 +568,75 @@ class TestIterable(TestCase):
                     Counter(Iterable(test_input).mapmany(function).to_list())
                 )
 
+    def test_single_withFunc_returnsMatchingElement(self):
+        test_inputs = [set(t) for t in self.__test_lists]
+
+        for test_input in self.__extend_tests(test_inputs):
+            with self.subTest(test_input=test_input):
+                expected_value = list(test_input)[-1]
+                func = lambda x: x == expected_value
+
+                self.assertEqual(
+                    expected_value,
+                    Iterable(test_input).single(function=func)
+                )
+
+    def test_single_emptyIterableWithNoDefault_returnsNone(self):
+        for test_input in self.__extend_test([]):
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    None,
+                    Iterable(test_input).single()
+                )
+
+    def test_single_emptyIterableWithDefault_returnsDefault(self):
+        default = "default"
+        for test_input in self.__extend_test([]):
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    default,
+                    Iterable(test_input).single(default=default)
+                )
+
+    def test_single_noneMatchingFuncWithNoDefault_returnsNone(self):
+        # create a func that should not match anything
+        func = lambda x: x == uuid.uuid4()
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    None,
+                    Iterable(test_input).single(function=func)
+                )
+
+    def test_single_noneMatchingFuncWithDefault_returnsDefault(self):
+        # create a func that should not match anything
+        func = lambda x: x == uuid.uuid4()
+        default = "default"
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    default,
+                    Iterable(test_input).single(function=func, default=default)
+                )
+
+    def test_single_iterableHasMoreThanOneValue_raisesValueError(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(ValueError):
+                    Iterable(test_input).single()
+
+    def test_single_multipleMatchingFunc_RaisesValueError(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                test_input_list = list(test_input)
+                matching_values = {test_input_list[0], test_input_list[-1]}
+                func = lambda x: x in matching_values
+
+                with self.assertRaises(ValueError):
+                    Iterable(test_input).single(function=func)
+
     def test_concat_leftAndRightHasSameContents_returnsLeftConcatRight(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
@@ -681,7 +750,7 @@ class TestIterable(TestCase):
                     Iterable(test_input).first(function=func)
                 )
 
-    def test_first_noneMatchingFuncWithDefault_returnsNone(self):
+    def test_first_noneMatchingFuncWithDefault_returnsDefault(self):
         # create a func that should not match anything
         func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
         default = "default"
@@ -742,7 +811,7 @@ class TestIterable(TestCase):
                     Iterable(test_input).last(function=func)
                 )
 
-    def test_last_noneMatchingFuncWithDefault_returnsNone(self):
+    def test_last_noneMatchingFuncWithDefault_returnsDefault(self):
         # create a func that should not match anything
         func = lambda x: x == uuid.uuid4()
         default = "default"
