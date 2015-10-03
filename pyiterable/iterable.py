@@ -6,7 +6,7 @@ class Iterable:
 
     def __init__(self, iterable):
         iter(iterable)
-        self.__iterable = iterable
+        self.__iterable = list(iterable)
 
     def __iter__(self):
         return iter(self.__iterable)
