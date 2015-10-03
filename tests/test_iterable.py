@@ -121,7 +121,7 @@ class TestIterable(TestCase):
                 with self.assertRaises(TypeError):
                     Iterable(test_input)
 
-    def test_constructor_doesShallowCopy(self):
+    def test_constructor_copiesIterable(self):
         for test_input in self.__test_lists:
             with self.subTest(test_input=test_input):
                 iterable = Iterable(test_input)

@@ -1,4 +1,3 @@
-import copy
 from functools import reduce
 import itertools
 
@@ -7,7 +6,7 @@ class Iterable:
 
     def __init__(self, iterable):
         iter(iterable)
-        self.__iterable = copy.copy(iterable)
+        self.__iterable = list(iterable)
 
     def __iter__(self):
         return iter(self.__iterable)
