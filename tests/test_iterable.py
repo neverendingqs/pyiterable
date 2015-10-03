@@ -874,6 +874,46 @@ class TestIterable(TestCase):
                     Iterable(test_input).last(function=func, default=default)
                 )
 
+    def test_skip_countIsZero_returnsIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    list(test_input),
+                    Iterable(test_input).skip(0).to_list()
+                )
+
+    def test_skip_countIsSmallerThanLengthOfIterable_returnsSubsetOfIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                count = int(len(test_input) / 2)
+
+                self.assertEqual(
+                    list(test_input)[count:],
+                    Iterable(test_input).skip(count).to_list()
+                )
+
+    def test_skip_countIsExactlyLengthOfIterable_returnsEmptyIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    [],
+                    Iterable(test_input).skip(len(test_input)).to_list()
+                )
+
+    def test_skip_countIsGreaterThanLengthOfIterable_returnsEmptyIterable(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                self.assertEqual(
+                    [],
+                    Iterable(test_input).skip(len(test_input) + 1).to_list()
+                )
+
+    def test_skip_countIsNegative_raisesValueError(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(ValueError):
+                    Iterable(test_input).skip(-1)
+
     def test_take_countIsZero_returnsEmptyIterable(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
@@ -885,7 +925,7 @@ class TestIterable(TestCase):
     def test_take_countIsSmallerThanLengthOfIterable_returnsSubsetOfIterable(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):
-                prefix_length = len(test_input) - 1
+                prefix_length = int(len(test_input) / 2)
 
                 self.assertEqual(
                     list(test_input)[:prefix_length],

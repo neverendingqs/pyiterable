@@ -299,7 +299,9 @@ class Iterable:
         :raises ValueError: *iterable* contains more than one element after being filtered by *function*
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.single()
-        ValueError: The input iterable [1, 2, 5, 9] contains more than one element.
+        ValueError: iterable [1, 2, 5, 9] contains more than one element
+        >>> values.single(function=lambda x: x > 1)
+        ValueError: iterable [2, 5, 9] contains more than one element
         >>> values.single(function=lambda x: x > 5)
         9
         >>> values.single(function=lambda x: x > 10) # Returns None
@@ -310,12 +312,12 @@ class Iterable:
         if function is None:
             filtered_self = self
         else:
-            filtered_self = self.filter(function).to_list()
+            filtered_self = self.filter(function)
 
-        if len(filtered_self) > 1:
-            raise ValueError("the input iterable {} contains more than one element".format(self.__iterable))
+        if filtered_self.len() > 1:
+            raise ValueError("iterable {} contains more than one element".format(filtered_self.__iterable))
 
-        return Iterable(filtered_self).first(default=default)
+        return filtered_self.first(default=default)
 
 
     # List-like transformations / functions
@@ -402,6 +404,36 @@ class Iterable:
 
         return next(iter(reversed_iterable), default)
 
+    def skip(self, count):
+        """ Skips the first *count* elements in *iterable*
+
+        * This function will convert the *iterable* to a sequence type before retrieving the values
+        * If *count* is equal to or greater than the length of *iterable*, no elements are taken
+
+        :param count: number of values to skip
+        :return: *Iterable* containing all the elements of *iterable* without the first *count* elements
+
+        :raises ValueError: *count* is a negative value
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.skip(1).to_list()
+        [2, 5, 9]
+        >>> values.skip(3).to_list()
+        [9]
+        >>> values.skip(10).to_list()
+        []
+        >>> values.take(-1).to_list()
+        ValueError: 'count' must be greater than 0
+        """
+        if count < 0:
+            raise ValueError("'count' must be greater than 0")
+        elif count == 0:
+            return self
+        elif count >= len(self.__iterable):
+            return Iterable([])
+        else:
+            return Iterable(list(self.__iterable)[count:])
+
     def take(self, count):
         """ Gets the first *count* elements in *iterable*
 
@@ -414,6 +446,8 @@ class Iterable:
         :raises ValueError: *count* is a negative value
 
         >>> values = Iterable([1, 2, 5, 9])
+        >>> values.take(1).to_list()
+        [1]
         >>> values.take(3).to_list()
         [1, 2, 5]
         >>> values.take(10).to_list()
