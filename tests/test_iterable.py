@@ -888,7 +888,7 @@ class TestIterable(TestCase):
                 prefix_length = len(test_input) - 1
 
                 self.assertEqual(
-                    list(test_input)[prefix_length:],
+                    list(test_input)[:prefix_length],
                     Iterable(test_input).take(prefix_length).to_list()
                 )
 

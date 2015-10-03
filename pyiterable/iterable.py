@@ -414,8 +414,8 @@ class Iterable:
         :raises ValueError: *count* is a negative value
 
         >>> values = Iterable([1, 2, 5, 9])
-        >>> values.take(2).to_list()
-        [5, 9]
+        >>> values.take(3).to_list()
+        [1, 2, 5]
         >>> values.take(10).to_list()
         [1, 2, 5, 9]
         >>> values.take(-1).to_list()
@@ -428,7 +428,7 @@ class Iterable:
         elif count >= len(self.__iterable):
             return self
         else:
-            return Iterable(list(self.__iterable)[count:])
+            return Iterable(list(self.__iterable)[:count])
 
     # Set-like transformations / functions
     def difference(self, iterable):
