@@ -402,6 +402,36 @@ class Iterable:
 
         return next(iter(reversed_iterable), default)
 
+    def skip(self, count):
+        """ Skips the first *count* elements in *iterable*
+
+        * This function will convert the *iterable* to a sequence type before retrieving the values
+        * If *count* is equal to or greater than the length of *iterable*, no elements are taken
+
+        :param count: number of values to skip
+        :return: *Iterable* containing all the elements of *iterable* without the first *count* elements
+
+        :raises ValueError: *count* is a negative value
+
+        >>> values = Iterable([1, 2, 5, 9])
+        >>> values.skip(1).to_list()
+        [2, 5, 9]
+        >>> values.skip(3).to_list()
+        [9]
+        >>> values.skip(10).to_list()
+        []
+        >>> values.take(-1).to_list()
+        ValueError: 'count' must be greater than 0
+        """
+        if count < 0:
+            raise ValueError("'count' must be greater than 0")
+        elif count == 0:
+            return self
+        elif count >= len(self.__iterable):
+            return Iterable([])
+        else:
+            return Iterable(list(self.__iterable)[count:])
+
     def take(self, count):
         """ Gets the first *count* elements in *iterable*
 
@@ -414,6 +444,8 @@ class Iterable:
         :raises ValueError: *count* is a negative value
 
         >>> values = Iterable([1, 2, 5, 9])
+        >>> values.take(1).to_list()
+        [1]
         >>> values.take(3).to_list()
         [1, 2, 5]
         >>> values.take(10).to_list()
