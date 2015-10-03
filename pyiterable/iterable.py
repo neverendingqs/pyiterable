@@ -299,7 +299,9 @@ class Iterable:
         :raises ValueError: *iterable* contains more than one element after being filtered by *function*
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.single()
-        ValueError: The input iterable [1, 2, 5, 9] contains more than one element.
+        ValueError: iterable [1, 2, 5, 9] contains more than one element
+        >>> values.single(function=lambda x: x > 1)
+        ValueError: iterable [2, 5, 9] contains more than one element
         >>> values.single(function=lambda x: x > 5)
         9
         >>> values.single(function=lambda x: x > 10) # Returns None
@@ -310,12 +312,12 @@ class Iterable:
         if function is None:
             filtered_self = self
         else:
-            filtered_self = self.filter(function).to_list()
+            filtered_self = self.filter(function)
 
-        if len(filtered_self) > 1:
-            raise ValueError("the input iterable {} contains more than one element".format(self.__iterable))
+        if filtered_self.len() > 1:
+            raise ValueError("iterable {} contains more than one element".format(filtered_self.__iterable))
 
-        return Iterable(filtered_self).first(default=default)
+        return filtered_self.first(default=default)
 
 
     # List-like transformations / functions
