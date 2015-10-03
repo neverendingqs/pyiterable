@@ -773,6 +773,28 @@ class TestIterable(TestCase):
                     Iterable(test_input).first(function=func, default=default)
                 )
 
+    def test_get_indexInsideBounds_returnsValue(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                index = int(len(test_input) / 2)
+
+                self.assertEqual(
+                    list(test_input)[index],
+                    Iterable(test_input).get(index)
+                )
+
+    def test_get_indexLessThanZero_raisesIndexError(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(IndexError):
+                    Iterable(test_input).get(-1)
+
+    def test_get_indexTooLarge_raisesIndexError(self):
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(IndexError):
+                    Iterable(test_input).get(len(test_input))
+
     def test_last_noArgs_returnsLastElement(self):
         for test_input in self.__test_inputs:
             with self.subTest(test_input=test_input):

@@ -313,7 +313,7 @@ class Iterable:
             filtered_self = self.filter(function).to_list()
 
         if len(filtered_self) > 1:
-            raise ValueError("The input iterable {} contains more than one element.".format(self.__iterable))
+            raise ValueError("the input iterable {} contains more than one element".format(self.__iterable))
 
         return Iterable(filtered_self).first(default=default)
 
@@ -352,6 +352,24 @@ class Iterable:
             return next(iter(filter(function, self.__iterable)), default)
         else:
             return next(iter(self.__iterable), default)
+
+    def get(self, index):
+        """ Equivalent to calling **list(** *iterable* **)[** *index* **]**
+
+        * This function will convert the *iterable* to a sequence type before retrieving the value at *index*
+        * *-1* is not supported to get the last element; use **last()** instead
+
+        :param index: element number inside *iterable*
+        :return: value at *index* from *iterable*
+
+        :raises IndexError: *index* is less than 0 or is out of bounds
+        """
+        iterable_as_list = list(self.__iterable)
+
+        if index < 0 or index >= len(iterable_as_list):
+            raise IndexError("index out of range")
+
+        return list(self.__iterable)[index]
 
     def last(self, function=None, default=None):
         """ Equivalent to calling **next( iter( reversed( list( filter(** *function, iterable* **) ) ) )** *, default* **)**
