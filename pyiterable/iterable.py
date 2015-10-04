@@ -1,5 +1,6 @@
 from functools import reduce
 import itertools
+import warnings
 
 
 class Iterable:
@@ -289,30 +290,30 @@ class Iterable:
         """
         return Iterable(itertools.chain.from_iterable(map(function, self.__iterable)))
 
-    def single(self, function=None, default=None):
+    def single(self, filter_by=None, default=None):
         """ Equivalent to calling **first()**, except it raises *ValueError* if *iterable* contains more than one element
 
-        :param function: keyword-only; function used to filter unwanted values
-        :param default: keyword-only value to return if *self* is empty after filtered by *function*
-        :return: value of *self* filtered by *function*
+        :param filter_by: keyword-only; function used to filter unwanted values
+        :param default: keyword-only value to return if *self* is empty after filtered by *filter_by*
+        :return: value of *self* filtered by *filter_by*
 
-        :raises ValueError: *iterable* contains more than one element after being filtered by *function*
+        :raises ValueError: *iterable* contains more than one element after being filtered by *filter_by*
+
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.single()
         ValueError: iterable [1, 2, 5, 9] contains more than one element
-        >>> values.single(function=lambda x: x > 1)
+        >>> values.single(filter_by=lambda x: x > 1)
         ValueError: iterable [2, 5, 9] contains more than one element
-        >>> values.single(function=lambda x: x > 5)
+        >>> values.single(filter_by=lambda x: x > 5)
         9
-        >>> values.single(function=lambda x: x > 10) # Returns None
-        >>> values.single(function=lambda x: x > 10, default=0)
+        >>> values.single(filter_by=lambda x: x > 10) # Returns None
+        >>> values.single(filter_by=lambda x: x > 10, default=0)
         0
-
         """
-        if function is None:
+        if filter_by is None:
             filtered_self = self
         else:
-            filtered_self = self.filter(function)
+            filtered_self = self.filter(filter_by)
 
         if filtered_self.len() > 1:
             raise ValueError("iterable {} contains more than one element".format(filtered_self.__iterable))
@@ -334,24 +335,35 @@ class Iterable:
         """
         return Iterable(list(self.__iterable) + list(iterable))
 
-    def first(self, function=None, default=None):
-        """ Equivalent to calling **next( iter( filter(** *function, iterable* **) )** *, default* **)**
+    def first(self, filter_by=None, default=None, function=None):
+        """ Equivalent to calling **next( iter( filter(** *filter_by, iterable* **) )** *, default* **)**
 
-        :param function: keyword-only; function used to filter unwanted values
-        :param default: keyword-only value to return if *self* is empty after filtered by *function*
-        :return: first value of *self* filtered by *function*
+        :param filter_by: keyword-only; function used to filter unwanted values
+        :param default: keyword-only; value to return if *self* is empty after filtered by *filter_by*
+        :param function: deprecated; use *filter_by*
+        :return: first value of *self* filtered by *filter_by*
 
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.first()
         1
-        >>> values.first(function=lambda x: x > 5)
+        >>> values.first(filter_by=lambda x: x > 5)
         9
-        >>> values.first(function=lambda x: x > 10) # Returns None
-        >>> values.first(function=lambda x: x > 10, default=0)
+        >>> values.first(filter_by=lambda x: x > 10) # Returns None
+        >>> values.first(filter_by=lambda x: x > 10, default=0)
         0
         """
-        if function:
-            return next(iter(filter(function, self.__iterable)), default)
+        if function is not None:
+            warnings.warn(
+                "'function' is deprecated; use 'filter_by' instead",
+                category=DeprecationWarning
+            )
+            if filter_by is not None:
+                raise ValueError("both 'filter_by' and 'function' were provided; please only use 'filter_by', as 'function' is deprecated")
+
+        filter_func = filter_by or function
+
+        if filter_func:
+            return next(iter(filter(filter_func, self.__iterable)), default)
         else:
             return next(iter(self.__iterable), default)
 
@@ -381,24 +393,24 @@ class Iterable:
 
         return list(self.__iterable)[index]
 
-    def last(self, function=None, default=None):
-        """ Equivalent to calling **next( iter( reversed( list( filter(** *function, iterable* **) ) ) )** *, default* **)**
+    def last(self, filter_by=None, default=None):
+        """ Equivalent to calling **next( iter( reversed( list( filter(** *filter_by, iterable* **) ) ) )** *, default* **)**
 
-        :param function: keyword-only; function used to filter unwanted values
-        :param default: keyword-only value to return if *self* is empty after filtered by *function*
-        :return: last value of *self* filtered by *function*
+        :param filter_by: keyword-only; function used to filter unwanted values
+        :param default: keyword-only value to return if *self* is empty after filtered by *filter_by*
+        :return: last value of *self* filtered by *filter_by*
 
         >>> values = Iterable([1, 2, 5, 9])
         >>> values.last()
         9
-        >>> values.last(function=lambda x: x < 5)
+        >>> values.last(filter_by=lambda x: x < 5)
         2
-        >>> values.last(function=lambda x: x < 1) # Returns None
-        >>> values.last(function=lambda x: x < 1, default=0)
+        >>> values.last(filter_by=lambda x: x < 1) # Returns None
+        >>> values.last(filter_by=lambda x: x < 1, default=0)
         0
         """
-        if function:
-            reversed_iterable = reversed(list(filter(function, self.__iterable)))
+        if filter_by:
+            reversed_iterable = reversed(list(filter(filter_by, self.__iterable)))
         else:
             reversed_iterable = reversed(list(self.__iterable))
 
