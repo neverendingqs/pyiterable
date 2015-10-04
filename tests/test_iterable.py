@@ -730,6 +730,12 @@ class TestIterable(TestCase):
 
                 self.assertEqual(
                     expected_first,
+                    Iterable(test_input).first(filter_by=func)
+                )
+
+                # TODO: Temporary until deprecated parameter is removed
+                self.assertEqual(
+                    expected_first,
                     Iterable(test_input).first(function=func)
                 )
 
@@ -758,6 +764,12 @@ class TestIterable(TestCase):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     None,
+                    Iterable(test_input).first(filter_by=func)
+                )
+
+                # TODO: Temporary until deprecated parameter is removed
+                self.assertEqual(
+                    None,
                     Iterable(test_input).first(function=func)
                 )
 
@@ -770,8 +782,32 @@ class TestIterable(TestCase):
             with self.subTest(test_input=test_input):
                 self.assertEqual(
                     default,
+                    Iterable(test_input).first(filter_by=func, default=default)
+                )
+
+                # TODO: Temporary until deprecated parameter is removed
+                self.assertEqual(
+                    default,
                     Iterable(test_input).first(function=func, default=default)
                 )
+
+    def test_first_usingFunctionParameter_raisesWarning(self):
+        func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
+        default = "default"
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertWarns(DeprecationWarning):
+                    Iterable(test_input).first(default=default, function=func)
+
+    def test_first_filterByAndFunctionProvided_raisesValueError(self):
+        func = lambda x: x == '32bf4b67-42f6-4a86-8229-aa10da364ff7'
+        default = "default"
+
+        for test_input in self.__test_inputs:
+            with self.subTest(test_input=test_input):
+                with self.assertRaises(ValueError):
+                    Iterable(test_input).first(filter_by=func, default=default, function=func)
 
     def test_get_indexInsideBounds_returnsValue(self):
         for test_input in self.__test_inputs:
