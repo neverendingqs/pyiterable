@@ -69,6 +69,13 @@ do this:
 Release
 -------
 
+0.4.0
+
+* Bug fix; new ``Iterable`` objects should no longer mutate if the ``iterable`` passed into the constructor is mutated
+* Added more sequence-like functionality: ``get()``, ``last()``, ``skip()``, and ``take()``
+* Added ``contains()``, ``single()``, and ``is_empty()``
+* Added ``filter_by`` keyword parameter to replace ``function`` for ``first()``, as ``filter_by`` is more self-explanatory
+
 0.3.1
 
 * Added support for Python 3.5
