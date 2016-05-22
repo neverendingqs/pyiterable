@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/neverendingqs/pyiterable.svg?branch=master)](https://travis-ci.org/neverendingqs/pyiterable)
 [![Coverage Status](https://coveralls.io/repos/neverendingqs/pyiterable/badge.svg?branch=master&service=github)](https://coveralls.io/github/neverendingqs/pyiterable?branch=master)
 
 # Pyiterable
